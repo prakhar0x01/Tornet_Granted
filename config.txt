@@ -1,0 +1,2 @@
+sender_email:<YOUR-GMAIL>
+password:<YOUR-GMAIL-APP-PASSWORD>

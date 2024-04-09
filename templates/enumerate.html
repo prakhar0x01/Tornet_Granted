@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Tornet-Granted Onion Link Enumeration</title>
+
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #007bff;
+      color: #fff;
+      padding: 20px;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin: 0;
+      padding: 0;
+    }
+
+    a {
+      color: #fff;
+      text-decoration: none;
+    }
+
+    main {
+      padding: 20px;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      width: 50%;
+      margin: auto;
+    }
+
+    label {
+      margin-bottom: 5px;
+    }
+
+    input[type="text"] {
+      padding: 5px;
+      border: 1px solid #ccc;
+      width: 100%;
+    }
+
+    input[type="submit"] {
+      padding: 10px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+
+    p {
+      color: red;
+      margin-top: 10px;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    li {
+      margin-bottom: 10px;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .fa-lock {
+      font-size: 20px;
+      margin-right: 5px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>
+      <i class="fas fa-lock"></i> Tornet-Granted Onion Link Enumeration
+    </h1>
+    <a href="/">Dashboard</a>
+  </header>
+
+  <main>
+    <h2>Onion Link Enumeration</h2>
+
+    <form action="/enumerate" method="post">
+      <label for="keyword">Search Keyword:</label>
+      <input type="text" id="query" name="query" required>
+      <br>
+      <input type="submit" value="Enumerate Onion Links">
+      <p>{{ message }}</p>
+    </form>
+
+    <hr><h1 style="color: green;">{{ success }}</h1><hr>
+    <ul>
+      {% for link in links %}
+        <li><a style="color: black;" href="{{ link }}">{{ link }}</a>
+          <button onclick="copyLink(this.previousElementSibling)">Copy Link</button>
+        </li>
+
+        <script>
+        function copyLink(linkElement) {
+        // Get the link text
+        const linkText = linkElement.textContent;
+
+        // Create a temporary input element to hold the link text
+        const copyInput = document.createElement('input');
+        copyInput.style.position = 'absolute';
+        copyInput.style.left = '-9999px';
+        document.body.appendChild(copyInput);
+
+        // Set the input value to the link text
+        copyInput.value = linkText;
+
+        // Select the input text
+        copyInput.select();
+
+        // Copy the selected text to the clipboard
+        document.execCommand('copy');
+
+        // Remove the temporary input element
+        document.body.removeChild(copyInput);
+        }
+        </script>
+      {% endfor %}
+    </ul>
+  </main>
+</body>
+</html>

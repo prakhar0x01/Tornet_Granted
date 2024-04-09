@@ -1,0 +1,129 @@
+:{% block content %}
+<style>
+
+  header {
+  background-color: #333; /* Dark background */
+  color: #fff; /* Light text color */
+  padding: 20px; /* Padding for spacing */
+  display: flex; /* Arrange elements horizontally */
+  justify-content: space-between; /* Space elements evenly */
+  align-items: center; /* Align horizontally in the middle */
+}
+
+h1 {
+  margin: 0; /* Remove default top margin */
+}
+
+nav {
+  display: flex; /* Arrange links horizontally */
+  list-style: none; /* Remove default bullet points */
+  padding: 0; /* Remove default padding */
+  margin: 0; /* Remove default margin */
+}
+
+nav a {
+  color: inherit; /* Inherit text color from header */
+  text-decoration: none; /* Remove underline */
+  margin-right: 20px; /* Spacing between links */
+  font-weight: bold; /* Make links stand out */
+}
+
+nav a:hover {
+  color: #ddd; /* Change text color on hover */
+}
+
+  /* Dark theme styles */
+  body {
+    background-color: #222;
+    color: #ddd;
+    font-family: sans-serif;
+  }
+
+  .admin-table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 20px auto;
+    text-align:center;
+  }
+
+  .admin-table th,
+  .admin-table td {
+    padding: 9px;
+    border: 1px solid #444;
+    text-align: center;
+  }
+
+  .admin-table th {
+    background-color: #333;
+    color: #fff;
+  }
+
+  .admin-buttons {
+    text-align: center;
+    margin-top: 20px;
+    color:#300;
+  }
+
+  .admin-buttons a {
+    margin: 0 10px;
+  }
+
+  .admin-buttons button {
+    background-color: #BB86FC;
+    color: black;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+.bin-button {
+  padding: 7px 15px;
+  background-color: #BB86FC;  
+  font-size: 30px;
+  color:black;
+}
+
+  .admin-buttons button:hover {
+    background-color: #444;
+  }
+</style>
+<header>
+  <h1>Update Users Password</h1>
+  <nav>
+    <a href="/dashboard">Home</a>
+    <a href="/add_user">Add User</a>
+    <a href="/update_password">Update Password</a>
+  </nav>
+</header>
+<div class="admin-table">
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>USERNAME</th>
+        <th>PASSWORD (SHA-256)</th>
+        <th>API_KEY</th>
+        <th>SECRET_ACCESS_KEY</th>
+        <th>Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for user in users %}
+        <tr>
+          <td>{{ user.id }}</td>
+          <td>{{ user.username }}</td>
+          <td>{{ user.password }}</td>
+          <td>{{ user.api_key }}</td>
+          <td>{{ user.secret_access_key }}</td>
+          <td>
+            <form action="{{ url_for('delete_user', user_id=user.id) }}" method="post">
+              <button type="submit" class="bin-button"><b>&#128465;</b></button>
+            </form>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

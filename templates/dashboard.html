@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+        body {
+            background-color: #17191c;
+            color: #adb5bd;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #222;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: #fff;
+            text-decoration: none;
+            font-size: 24px;
+        }
+
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            display: inline;
+            margin-right: 20px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .container {
+            width: 80%;
+            margin: 20px auto;
+        }
+
+        .actions-wrapper {
+            margin-bottom: 20px;
+        }
+
+        .actions-wrapper h2 {
+            color: #fff;
+            margin-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #222;
+            color: #fff;
+            text-align:center;
+        }
+        
+
+        .action-card {
+            display: block;
+	          background-color: #BB86FC;
+            color: #ddd;
+            padding-bottom: 150px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .action-card:hover {
+            background-color: #BB86FC;
+        }
+
+        .action-card.with-icon {
+            position: relative;
+            padding-bottom:150px;
+        }
+
+        .action-card.with-icon i {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .colored {
+            background-color: #007bff;
+        }
+
+        .colored:hover {
+            background-color: #0056b3;
+        }
+
+        .task-card {
+            background-color: #BB86FC;
+            color: #ddd;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            padding: 20px;
+        }
+
+        .card-header {
+            background-color: #BB86FC;
+            padding: 10px;
+            border-radius: 5px 5px 0 0;
+        }
+
+        .card-header h2 {
+            margin: 0;
+            color: black;
+        }
+
+        .card-body {
+            padding: 10px;
+            color:black;
+        }
+
+        .card-body p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <header>
+            <a href="#" class="logo">Welcome {{ username }} .!</a>
+            <nav>
+                <ul>
+                    <li><a href="/dashboard">Home</a></li>
+                    <li><a href="/logout">Logout</a></li>
+                    {% if current_user.username == 'admin' %}
+                        <li><a href="/users">Admin Page</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </header>
+        <section class="container section section__height" id="home">
+            <div class="actions-wrapper">
+                <h2>Actions</h2>
+                <table>
+                    <tr>
+                        <th>Discovery</th>
+                        <th>Validation</th>
+                        <th>Scheduling</th>
+                    </tr>
+                    <tr>
+                        <td>
+                        <a href="/enumerate/discover" class="action-card with-icon">
+                            <h2 style="color:black; margin-top:15px; margin-bottom:15px; text-align:center;">Discover Onion URLs</h2>
+                                <i style="color:black; margin-left:10px;" class="fas fa-search">Explore the depths of the dark web with our multi-engine onion URL discovery tool. Search for specific keywords and uncover hidden websites across various darknet resources. Utilize recursive levels to delve deeper into the underground network. Export your findings for further analysis and exploration.</i>
+                        </a>
+                        </td>
+                        <td>
+                        <a href="/enumerate/validate" class="action-card with-icon">
+                            <h2 style="color:black; margin-top:15px; margin-bottom:15px; text-align:center;">Validate Onion URLs</h2>
+                                <i style="color:black; margin-left:15px; margin-bottom:16px; margin-right:10px; margin-top:10px;" class="fas fa-search">users can quickly check the status of Onion URLs, distinguishing between active and inactive ones. Additionally, users can export the validation results for further analysis and management.</i>
+                        </a>
+                        </td>
+                        <td>
+                        <a href="/schedule" class="action-card with-icon">
+                            <h2 style="color:black; margin-top:15px; margin-bottom:15px; margin:16px; text-align:center;">Schedule Tasks</h2>
+                                <i style="color:black; margin-left:10px;" class="fas fa-search">Efficiently manage your tasks with our scheduling feature, enabling you to automate processes such as discovering and validating onion addresses, fingerprinting servers, and more. Receive timely results directly to your email for seamless workflow integration.</i>
+                        </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Rendering</th>
+                        <th>Details</th>
+                    </tr>
+                    <tr>
+                        <td>
+                        <a href="/enumerate/render" class="action-card with-icon">
+                            <h2 style="color:black; margin-top:15px; margin-bottom:15px; text-align:center;">Extract Onion URLs DOM</h2>
+                                <i style="color:black; margin-left:10px;" class="fas fa-search">This feature allows users to analyze the structure and content of web pages hosted on the Tor network, providing insights into the layout, elements, and data present on these hidden sites. With the ability to extract the DOM, users can better understand the information available on Onion URLs and make informed decisions based on their analysis.</i>
+                        </a>
+                        </td>
+                        <td>
+                        <a href="/enumerate/details" class="action-card with-icon">
+                            <h2 style="color:black; margin-top:15px; margin-bottom:15px; text-align:center;">Enumerate Onion URLs</h2>
+                                <i style="color:black; margin-left:15px; margin-right:10px; margin-top:10px;" class="fas fa-search">
+The product features an onion URL enumeration tool for basic fingerprinting and leak detection, including identification of usernames, passwords, cryptocurrencies, and domains. Additionally, it offers functionality to extract EXIF metadata from various file types such as images and videos, enhancing user insights and security measures.</i>
+                        </a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <h2>Pending Tasks</h2>
+            {% for task in tasks %}
+                <div class="task-card">
+                    <div class="card-header">
+                        <h2>{{ task.task_route }}</h2>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Data:</strong> {{ task.data }}</p>
+                        <p><strong>Email:</strong> {{ task.email }}</p>
+                        <p><strong>Schedule:</strong> {{ task.cron_schedule }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </section>
+    </main>
+</body>
+</html>

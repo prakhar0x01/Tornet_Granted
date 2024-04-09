@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Discover Onion URLs</title>
+  <style>
+    /* Dark theme styles */
+    body {
+      background-color: #222;
+      color: #ddd;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0; /* Remove default margin for full-page layout */
+      display: flex; /* Use flexbox for container */
+      min-height: 100vh; /* Set minimum height to fill viewport */
+      justify-content: center; /* Center content horizontally */
+      align-items: center; /* Center content vertically */
+    }
+
+    /* Main content styles */
+    main {
+      width: 80%; /* Adjust main content width as needed */
+      margin-top: 20px; /* Add margin space at the top */
+    }
+
+    /* Form styles */
+    form {
+      margin-bottom: 20px; /* Add margin space at the bottom */
+    }
+
+    label {
+      font-weight: bold;
+    }
+
+    input[type="text"],
+    select {
+      margin-bottom: 10px;
+      padding: 8px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      width: 100%;
+    }
+
+    input[type="submit"] {
+      background-color: #BB86FC;
+      color: black;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1em;
+      transition: background-color 0.3s ease;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #45a049;
+    }
+
+    /* Table styles */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+      text-align:center;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: center;
+    }
+
+    th {
+      background-color: #333;
+      color: #ddd;
+      font-size: 1.2em;
+      text-transform: uppercase;
+    }
+
+    /* Link list styles */
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    li {
+      margin-bottom: 10px;
+    }
+
+    a {
+      color: #4CAF50;
+      text-decoration: none;
+    }
+
+    button {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 5px;
+      background-color: #BB86FC;
+      color: black;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #555;
+    }
+  </style>
+</head>
+<body>
+<main>
+   <h1>Discover Onion Links..</h1>
+    <hr>
+    <form action="/enumerate/discover" method="post">
+      <label for="keyword">Search Keyword:&nbsp;&nbsp;&nbsp;&nbsp;<i>(drugs, hacking, wiki, crypto, markets)</i></label><br><br>
+      <input type="text" id="keywords" name="keywords" required>
+      <br>
+      <input type="text" id="api_key" name="api_key" value ="{{ api_key }}" hidden required>
+      <input type="text" id="secret_access_key" name="secret_access_key" value="{{ secret_access_key }}" hidden required>
+      <br>
+      <select id="level" name="level">
+        <option value="1">Depth level(default 1)</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+      </select><br>
+      <br><i>Note: We made this as fast as possible, The more <b>higher value of Depth level</b> you choose <b>the longer time it will take to process</b>.</i><br>
+      <br><input type="submit" value="Discover Onion Links">
+      <p>{{ message }}</p>
+    </form>
+    <p style="text-align: center;">{{ total }}</p>
+    <hr>
+    <form action="/enumerate/discover" method="POST"><br>
+      <label for="export_format">Export Format:</label><br><br>
+      <select id="export_format" name="export_format">
+        <option value="txt">TXT</option>
+        <option value="json">JSON</option>
+        <option value="pdf">PDF</option>
+      </select><br>
+      <input type="submit" value="Export">
+    </form>
+
+    <hr>
+    <table>
+      <thead>
+        <tr>
+          <th>Links</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for url in urls %}
+          <tr>
+            <td><a href="{{ url }}" target="_blank" style="color: #0f0;">{{ url }}</a></td>
+            <td>
+              <form action="/enumerate/render" method="POST"><input id="onion_url" name="onion_url" value="http://{{url}}" type="hidden"><button>Extract DOM</button></form>&nbsp;&nbsp;&nbsp;
+              <button onclick="copyLink('{{ url }}')">Copy Link</button>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <script>
+      function copyLink(url) {
+        // Create a temporary input element to hold the link text
+        const copyInput = document.createElement('input');
+        copyInput.style.position = 'absolute';
+        copyInput.style.left = '-9999px';
+        document.body.appendChild(copyInput);
+
+        // Set the input value to the link URL
+        copyInput.value = url;
+
+        // Select the input text
+        copyInput.select();
+
+        // Copy the selected text to the clipboard
+        document.execCommand('copy');
+
+        // Remove the temporary input element
+        document.body.removeChild(copyInput);
+      }
+    </script>
+  </main>
+</body>
+</html>

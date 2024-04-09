@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schedule Tasks</title>
+    <style>
+        body {
+            background-color: #1e1e1e;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        h1, h2 {
+            color: #f0f0f0;
+            border-bottom: 1px solid #333;
+            padding-bottom: 5px;
+            margin-top: 20px;
+        }
+
+        label {
+            display: block;
+            margin-top: 20px;
+            font-size:18px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        textarea,
+        select {
+            width: 30%;
+            padding: 10px;
+            border: 1px solid #333;
+            border-radius: 5px;
+            margin-top: 5px;
+            background-color: #333;
+            color: #ffffff;
+        }
+
+        input[type="datetime-local"] {
+            width: 30%;
+            padding: 10px;
+            border: 1px solid #333;
+            border-radius: 5px;
+            margin-top: 7px;
+            background-color: #333;
+            color: #ffffff;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #BB86FC;
+            color: black;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: BB86FC;
+        }
+    </style>
+</head>
+<body>
+    <h1>Schedule : Discover Onion URLs</h1>
+    <p style="color: green;">{{ success }}</p>
+    <hr>
+    <p style="color: red;">{{ error }}</p>
+
+    <!--<h2>Schedule : Discover Onion URLs</h2>-->
+    <form action="/schedule" method="POST">
+        <label for="discover_url">Search Keyword:</label>
+        <input type="text" name="keywords" id="keywords" required>
+        <input type="text" name="task_route" id="task_route" value="/enumerate/discover" hidden><br>
+        <label for="discover_depth">Depth:</label>
+        <select id="level" name="level">
+            <option value="1">Depth level(default 1)</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select>
+        
+        <label for="email">Email &nbsp;&nbsp;<i>(Result send to)</i></label>
+        <input type="email" name="email" id="email" required>
+        
+        <label for="discover_schedule">Schedule Date & Time:</label>
+        
+        <input type="datetime-local" name="scheduled_time" id="scheduled_time" required><br><br>
+        <button type="submit">Schedule Discovery</button><br>
+    </form>
+
+    <!-- Other forms can be styled similarly -->
+    <!--
+     
+    <h2>Validate URLs</h2>
+    <form action="/enumerate/validate" method="POST">
+        <label for="urls">URLs (separate by line):</label>
+        <textarea name="urls" id="urls" required></textarea>
+        <br>
+        <button type="submit">Validate URLs</button>
+    </form>
+
+    <h2>Extract DOM</h2>
+    <form action="/enumerate/render" method="POST">
+        <label for="extract_url">URL:</label>
+        <input type="text" name="extract_url" id="extract_url" required>
+        <br>
+        <button type="submit">Extract DOM</button>
+    </form>
+
+    <h2>Fingerprint Server</h2>
+    <form action="/enumerate/Fingerprint" method="POST">
+        <label for="fingerprint_url">URL:</label>
+        <input type="text" name="fingerprint_url" id="fingerprint_url" required>
+        <br>
+        <button type="submit">Fingerprint Server</button>
+    </form>
+
+    <h2>Check Open Directories & Common Files</h2>
+    <form action="/enumerate/check_dir" method="POST">
+        <label for="opendir_url">URL:</label>
+        <input type="text" name="opendir_url" id="opendir_url" required>
+        <br>
+        <button type="submit">Check Open Directories & Common Files</button>
+    </form>
+
+    <h2>Check EXIF Metadata</h2>
+    <form action="/enumerate/exif_metadata" method="POST">
+        <label for="exif_url">URL:</label>
+        <input type="text" name="exif_url" id="exif_url" required>
+        <br>
+        <button type="submit">Check EXIF Metadata</button>
+    </form>
+
+    <h2>Check Crypto Addresses</h2>
+    <form action="/enumerate/discover_crypto" method="POST">
+        <label for="crypto_url">URL:</label>
+        <input type="text" name="crypto_url" id="crypto_url" required>
+        <br>
+        <button type="submit">Check Crypto Addresses</button>
+    </form>
+    -->
+</body>
+</html>

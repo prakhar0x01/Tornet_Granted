@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/default.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/highlight.min.js"></script>
+<!-- Initialize highlight.js -->
+<script>hljs.initHighlightingOnLoad();</script>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Onion URL DOM</title>
+  <style>
+    /* Dark theme styles */
+    body {
+      background-color: #17191c;
+      color: #adb5bd;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    header {
+      background-color: #333;
+      padding: 20px 0;
+    }
+    
+    pre {
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      background-color: #f8f8f8;
+      text-align:left;
+    }
+
+    header h1 {
+      color: #dfecf0;
+    }
+
+    hr {
+      border: 1px solid #dfecf0;
+    }
+
+    main {
+      padding: 20px;
+    }
+
+    .form-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    form {
+      margin-bottom: 20px;
+    }
+
+    label {
+      color: #adb5bd;
+    }
+
+    input[type="text"], button, .btn {
+      margin: 5px;
+      padding: 8px 20px;
+      border: none;
+      border-radius: 5px;
+      background-color: #BB86FC;
+      color: black;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    input[type="text"] {
+      width: 300px;
+    }
+
+    button:hover, .btn:hover {
+      background-color: #BB86FC;
+    }
+
+    p.error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+    <header>
+        <h1>Render DOM<i>&nbsp;(Document Object Model)</i></h1>
+        <hr>
+    </header>
+    <main>
+        <div class="form-container">
+            <form action="/enumerate/render" method="POST">
+                <label for="onion_url">Onion URL:</label>
+                <input type="text" style="background-color:white;" id="onion_url" name="onion_url" placeholder="http://example.onion">
+                <br><br>
+                <button type="submit">Render Page</button>
+                <p class="error">{{ error }}</p>
+                <p><i>Note : We made this as fast as possible, but due to TOR relays & end server configuration, it may take more time than usual.</i></p>
+            </form>
+            
+            <h2><i style="color:#0f0;">{{onion_url}}</i></h2><br><br>
+           
+                {% if dom_content %}
+                    {{ dom_content | safe }}
+                {% endif %}
+            
+        </div>
+    </main>
+</body>
+</html>

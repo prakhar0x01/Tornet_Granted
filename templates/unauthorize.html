@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Access Denied</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700">
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #1e1e1e;
+        }
+
+        .container {
+            width: 500px;
+            margin: 100px auto;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin: 0;
+            padding: 20px 0;
+            color: white;
+        }
+
+        p {
+            font-size: 16px;
+            margin: 0;
+            padding: 10px 0;
+        }
+
+        a {
+            color: #007bff;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .error-401 {
+        font-size: 100px;
+        color: #F05A22;
+        line-height: 1;
+        position: absolute;
+        top: 9%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        opacity: 0.70;
+    }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="error-401">401</div>
+        <h1>Access Denied</h1>
+        <p style="color:white;">You are not authorized to access this page. Please log in or contact the administrator if you believe you should have access.</p>
+        <br><a href="/dashboard">Go Back</a>
+    </div>
+</body>
+</html>

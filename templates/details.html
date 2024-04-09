@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Enumeration Tool</title>
+    <style>
+        body {
+            background-color: #17191c;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            align-items:center;
+        }
+        header {
+            background-color: #232f3e;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+        h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            background-color: #17191c;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        input[type="text"],
+        input[type="file"],
+        select {
+            padding: 12px;
+            margin: 10px 0;
+            width: 60%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            color: black;
+            outline: none;
+        }
+        input[type="text"]:focus,
+        input[type="file"]:focus,
+        select:focus {
+            box-shadow: 0 0 5px #232f3e;
+        }
+        input[type="text"]::placeholder {
+            color: #888;
+        }
+        label {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+            color: white;
+        }
+        button[type="submit"] {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #BB86FC;
+            color: black;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 15px;
+        }
+        button[type="submit"]:hover {
+            background-color: #BB86FC;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            border: 1px solid #ddd;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            text-align: left;
+            padding: 10px;
+            color:white;
+        }
+        th {
+            background-color: #333;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #333;
+        }
+        tr:hover {
+            background-color: #333;
+        }
+        strong {
+            color: #90EE90;
+        }
+        pre {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            max-width: 600px;
+            overflow-x: auto;
+            margin-top: 20px;
+            align-items:center;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Enumerate URLs</h1>
+    </header>
+    <div class="container">
+        <form action="/enumerate/details" method="POST">
+            <p style="color:white;"><i>Note : The time taken depends upon the fuzzing and recursive process of enumeration..!</i></p>
+            <input type="text" name="url" id="url" placeholder="Enter URL" style="color:black;" required>
+            <input type="text" name="new_word" style="color:black;" placeholder="Add New Word to Wordlist (Optional)">
+            <label><input type="checkbox" name="is_fuzz"> Fuzz</label>
+            <button type="submit">Start Enumeration</button>
+        </form>
+        <form action="/enumerate/details" method="POST">
+            <label for="export_format">Export Format:</label>
+            <select id="export_format" name="export_format">
+              <option value="txt">TXT</option>
+              <option value="json">JSON</option>
+              <option value="pdf">PDF</option>
+            </select><br>
+            <button type="submit">Export</button>
+        </form>
+        <hr>
+        <form action="/enumerate/metadata" method="POST" enctype="multipart/form-data">
+            <input type="file" name="file" accept="image/*" required>
+            <button type="submit">Extract Image Metadata</button>
+        
+        <!--{% if message %}
+            <p>{{ message }}</p>
+        {% endif %}-->
+        {% if metadata %}
+            <h2 style="color:white; text-align:center;">Metadata:</h2>
+            <pre class="containter">{{ metadata }}</pre>
+        {% endif %}
+        </form>
+        <h1 style="font-size: 24px; margin-top: 20px; color:white;">Fuzzing Results</h1><p style="color:white;"><i>Note : Results may inaccurate sometimes..!!</i></p>
+        <table>
+            <tr>
+                <th class="category-column">Category</th>
+                <th class="match-column">Match</th>
+                <th class="url-column">URL</th>
+            </tr>
+            {% for result in results %}
+                {% if "FUZZED" in result %}
+                    <tr>
+                        <td colspan="3"><strong>{{ result }}</strong></td>
+                    </tr>
+                {% else %}
+                    {% set parts = result.split('|') %}
+                    <tr>
+                        <td>{{ parts[0] }}</td>
+                        <td>{{ parts[1] }}</td>
+                        <td>{{ parts[2] }}</td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </table>
+    </div>
+</body>
+</html>

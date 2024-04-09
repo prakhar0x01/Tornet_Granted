@@ -1,0 +1,137 @@
+<style>
+header {
+  background-color: #333; /* Dark background */
+  color: #fff; /* Light text color */
+  padding: 20px; /* Padding for spacing */
+  display: flex; /* Arrange elements horizontally */
+  justify-content: space-between; /* Space elements evenly */
+  align-items: center; /* Align horizontally in the middle */
+}
+
+h1 {
+  margin: 0; /* Remove default top margin */
+}
+
+nav {
+  display: flex; /* Arrange links horizontally */
+  list-style: none; /* Remove default bullet points */
+  padding: 0; /* Remove default padding */
+  margin: 0; /* Remove default margin */
+}
+
+nav a {
+  color: inherit; /* Inherit text color from header */
+  text-decoration: none; /* Remove underline */
+  margin-right: 20px; /* Spacing between links */
+  font-weight: bold; /* Make links stand out */
+}
+
+nav a:hover {
+  color: #ddd; /* Change text color on hover */
+}
+
+  /* Dark theme styles */
+  body {
+    background-color: #222;
+    color: #ddd;
+    font-family: sans-serif;
+  }
+
+  /* Optional: Center the title if there's no logo */
+  header:empty {
+    justify-content: center;
+  }
+
+  /* Main content styles */
+  main {
+    padding: 20px;
+  }
+
+  .Mblock {
+    margin: 0 auto;
+    max-width: 500px; /* Adjust as needed */
+    background-color: #333;
+    border-radius: 5px;
+    padding: 20px;
+    color: #fff; /* Text color for the form */
+  }
+
+  .Mblock h2 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  /* ... rest of your form styles ... */
+
+.Mblock label {
+    display: block;
+    margin-bottom:10;  
+    font-size:15px;
+    margin-top:15;
+  }
+
+  .Mblock input[type="text"],
+  .Mblock input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #444;
+    border-radius: 3px;
+    margin-bottom: 15px;
+   }
+
+  .Mblock input[type="submit"] {
+    background-color: #BB86FC; /* Button color */
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    color:black;
+    font-size:15px;
+  }
+
+  .Mblock input[type="submit"]:hover {
+    background-color: #AA7CFC;
+  }
+
+  .Mblock p.error,
+  .Mblock p.success {
+    color: #FF474C; /* Error message color */
+  }
+
+  .Mblock p.success {
+    color: #0f0; /* Success message color */
+  }
+
+  /* FontAwesome icons (optional) */
+  .fa {
+    margin-right: 5px;
+  }
+</style>
+<header>
+  <h1>Update Users Password</h1>
+  <nav>
+    <a href="/dashboard">Home</a>
+    <a href="/users">Admin Portal</a>
+  </nav>
+</header>
+<body>
+  <main>
+    <!--<h1 style="font-size:50px;text-align:center;">Update Users Password</h1>-->
+    <div class="Mblock">
+
+      <form action="{{ url_for('update_password') }}" method="post">
+        <label for="username"><b>Username:<b></label>
+        <input type="text" id="username" name="username" required>
+        <label for="password"><b>New Password:<b></label>
+        <input type="password" id="password" name="password" required><br>
+        <br><input type="submit" value="Update Password">
+        <p class="success">{{ success }}</p>
+        <p class="error">{{ error }}</p>
+      </form>
+    </div>
+    </main>
+
+  <script src="https://kit.fontawesome.com/a15a706d7f.js" crossorigin="anonymous"></script>
+</body>
+
