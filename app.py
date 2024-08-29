@@ -3,7 +3,7 @@ from flask_login import UserMixin, LoginManager, login_user, login_required, log
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
 from datetime import datetime
-from datetime import date
+from datetime import  date
 from flask_sqlalchemy import SQLAlchemy
 from concurrent.futures import ThreadPoolExecutor
 import OpenSSL.crypto
