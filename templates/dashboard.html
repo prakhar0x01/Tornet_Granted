@@ -1,223 +1,317 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-    <style>
-        body {
-            background-color: #17191c;
-            color: #adb5bd;
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
+{% extends "base.html" %}
+{% block title %}Command Center · TORNET GRANTED{% endblock %}
+{% block crumb %}Command Center{% endblock %}
 
-        header {
-            background-color: #222;
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+{% block content %}
+<!-- ─────── Page header ─────── -->
+<header class="page-head">
+  <div>
+    <div class="crumbs">
+      <span>Console</span>
+      <span>/</span>
+      <span>Command Center</span>
+    </div>
+    <h1>Welcome back, <span style="color:var(--accent);">{{ username }}</span>.</h1>
+    <p class="lede">Operational overview of the TORNET intelligence pipeline. All metrics reflect the current operator’s mission state.</p>
+  </div>
+  <div class="actions">
+    <a href="/enumerate/discover" class="btn btn--ghost">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      Start Recon
+    </a>
+    <a href="/schedule" class="btn btn--primary">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      Schedule Mission
+    </a>
+  </div>
+</header>
 
-        .logo {
-            color: #fff;
-            text-decoration: none;
-            font-size: 24px;
-        }
+<!-- ─────── KPI strip ─────── -->
+<section class="kpi-strip" aria-label="Operational metrics">
+  <div class="kpi kpi--accent">
+    <div class="kpi-label">Onions Discovered</div>
+    <div class="kpi-value"><span data-count="14820">0</span></div>
+    <div class="kpi-meta"><span class="delta delta--up">▲ 12.4%</span><span>last 24h</span></div>
+  </div>
+  <div class="kpi kpi--ok">
+    <div class="kpi-label">Active Endpoints</div>
+    <div class="kpi-value"><span data-count="3274">0</span></div>
+    <div class="kpi-meta"><span class="status-dot"></span><span>Liveness probed</span></div>
+  </div>
+  <div class="kpi kpi--threat">
+    <div class="kpi-label">Leaks Surfaced</div>
+    <div class="kpi-value"><span data-count="186">0</span></div>
+    <div class="kpi-meta"><span class="delta delta--up">▲ 6</span><span>past hour</span></div>
+  </div>
+  <div class="kpi kpi--warn">
+    <div class="kpi-label">EXIF Artefacts</div>
+    <div class="kpi-value"><span data-count="492">0</span></div>
+    <div class="kpi-meta"><span>Forensic queue</span></div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-label">Scheduled Ops</div>
+    <div class="kpi-value"><span data-count="{{ tasks|length if tasks else 0 }}">0</span></div>
+    <div class="kpi-meta"><span>Awaiting trigger</span></div>
+  </div>
+</section>
 
-        nav ul {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-        }
+<!-- ─────── Module launchpad ─────── -->
+<section class="mt-8">
+  <div class="row-sb mb-2">
+    <div>
+      <span class="eyebrow">Reconnaissance Modules</span>
+      <h2 style="font-size: var(--fs-20); margin-top: 8px;">Launchpad</h2>
+    </div>
+    <span class="text-low text-mono" style="font-size:11px;">06 OPERATIONAL · 00 OFFLINE</span>
+  </div>
 
-        nav ul li {
-            display: inline;
-            margin-right: 20px;
-        }
+  <div class="mod-grid mt-4">
+    <a href="/enumerate/discover" class="mod">
+      <header class="mod-head">
+        <div class="mod-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></div>
+        <div>
+          <div class="mod-sub">Module 01</div>
+          <div class="mod-title">Discover Onion URLs</div>
+        </div>
+      </header>
+      <p class="mod-body">Recursive keyword scraping across dark-web indexers. Tune depth, harvest unique onion endpoints, export findings.</p>
+      <div class="mod-foot">
+        <span class="pill pill--accent"><span class="dot"></span>RECURSIVE</span>
+        <span class="mod-cta">Launch →</span>
+      </div>
+    </a>
 
-        nav ul li a {
-            color: #fff;
-            text-decoration: none;
-        }
+    <a href="/enumerate/validate" class="mod">
+      <header class="mod-head">
+        <div class="mod-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <div>
+          <div class="mod-sub">Module 02</div>
+          <div class="mod-title">Validate Hidden Services</div>
+        </div>
+      </header>
+      <p class="mod-body">Single-shot or bulk validation. Liveness, response banners and dead-pool segmentation through Tor SOCKS5.</p>
+      <div class="mod-foot">
+        <span class="pill pill--ok"><span class="dot"></span>LIVE-PROBE</span>
+        <span class="mod-cta">Launch →</span>
+      </div>
+    </a>
 
-        .container {
-            width: 80%;
-            margin: 20px auto;
-        }
+    <a href="/enumerate/render" class="mod">
+      <header class="mod-head">
+        <div class="mod-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+        <div>
+          <div class="mod-sub">Module 03</div>
+          <div class="mod-title">DOM Extraction</div>
+        </div>
+      </header>
+      <p class="mod-body">Render and inspect the document model of any hidden service. Captures markup, asset references, embedded artefacts.</p>
+      <div class="mod-foot">
+        <span class="pill pill--info"><span class="dot"></span>STATIC</span>
+        <span class="mod-cta">Launch →</span>
+      </div>
+    </a>
 
-        .actions-wrapper {
-            margin-bottom: 20px;
-        }
+    <a href="/enumerate/details" class="mod">
+      <header class="mod-head">
+        <div class="mod-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div>
+        <div>
+          <div class="mod-sub">Module 04</div>
+          <div class="mod-title">Enumerate &amp; Fingerprint</div>
+        </div>
+      </header>
+      <p class="mod-body">Regex-driven leak detection — credentials, crypto wallets, emails, configuration files, server fingerprints.</p>
+      <div class="mod-foot">
+        <span class="pill pill--warn"><span class="dot"></span>LEAK-HUNT</span>
+        <span class="mod-cta">Launch →</span>
+      </div>
+    </a>
 
-        .actions-wrapper h2 {
-            color: #fff;
-            margin-bottom: 10px;
-        }
+    <a href="/enumerate/metadata" class="mod">
+      <header class="mod-head">
+        <div class="mod-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg></div>
+        <div>
+          <div class="mod-sub">Module 05</div>
+          <div class="mod-title">EXIF / Media Forensics</div>
+        </div>
+      </header>
+      <p class="mod-body">Pull hidden metadata from images and media — GPS, device fingerprints, embedded comments, hidden timestamps.</p>
+      <div class="mod-foot">
+        <span class="pill pill--threat"><span class="dot"></span>FORENSIC</span>
+        <span class="mod-cta">Launch →</span>
+      </div>
+    </a>
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
+    <a href="/schedule" class="mod">
+      <header class="mod-head">
+        <div class="mod-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
+        <div>
+          <div class="mod-sub">Module 06</div>
+          <div class="mod-title">Mission Scheduler</div>
+        </div>
+      </header>
+      <p class="mod-body">Plan recurring collection. Off-peak harvesting and automatic delivery of intelligence digests to operator inboxes.</p>
+      <div class="mod-foot">
+        <span class="pill pill--accent"><span class="dot"></span>AUTOMATED</span>
+        <span class="mod-cta">Launch →</span>
+      </div>
+    </a>
+  </div>
+</section>
 
-        th, td {
-            padding: 10px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
+<!-- ─────── Operator credentials + scheduled missions ─────── -->
+<section class="grid-2 mt-8" style="grid-template-columns: minmax(0, 1.05fr) minmax(0, 1.45fr);">
 
-        th {
-            background-color: #222;
-            color: #fff;
-            text-align:center;
-        }
-        
+  <!-- Operator card -->
+  <div class="card">
+    <div class="card-head">
+      <div>
+        <span class="eyebrow">Operator Profile</span>
+        <h3 style="margin-top: 8px;">Credentials &amp; API access</h3>
+      </div>
+      <span class="pill pill--{% if current_user.username == 'admin' %}accent{% else %}info{% endif %}">
+        <span class="dot"></span>{% if current_user.username == 'admin' %}DIRECTOR{% else %}ANALYST{% endif %}
+      </span>
+    </div>
+    <div class="card-body col gap-4">
+      <div>
+        <div class="text-up text-low" style="font-size:11px;">Operator ID</div>
+        <div class="text-hi text-mono mt-2" style="font-size:15px;">{{ username }}</div>
+      </div>
 
-        .action-card {
-            display: block;
-	          background-color: #BB86FC;
-            color: #ddd;
-            padding-bottom: 150px;
-            border-radius: 5px;
-            margin-bottom: 10px;
-            text-decoration: none;
-            transition: background-color 0.3s ease;
-        }
+      <div>
+        <div class="row-sb">
+          <span class="text-up text-low" style="font-size:11px;">API Key</span>
+          <button class="btn btn--ghost btn--sm" data-copy="{{ api_key }}">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copy
+          </button>
+        </div>
+        <code class="code mt-2" style="padding: 10px 14px;">{{ api_key }}</code>
+      </div>
 
-        .action-card:hover {
-            background-color: #BB86FC;
-        }
+      <div>
+        <div class="row-sb">
+          <span class="text-up text-low" style="font-size:11px;">Secret Access Key</span>
+          <div class="row gap-2">
+            <button class="btn btn--ghost btn--sm" data-reveal="#secret-access-key">REVEAL</button>
+            <button class="btn btn--ghost btn--sm" data-copy="{{ secret_access_key }}">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              Copy
+            </button>
+          </div>
+        </div>
+        <code class="code mt-2" id="secret-access-key" data-masked="1" data-real="{{ secret_access_key }}">{{ '•' * (secret_access_key|length if secret_access_key else 32) }}</code>
+      </div>
+    </div>
+    <div class="card-foot">
+      <span>Tier-2 operator · session attributable</span>
+      <a href="/logout" class="text-mono" style="color:var(--text-low); font-size:11px;">END SESSION →</a>
+    </div>
+  </div>
 
-        .action-card.with-icon {
-            position: relative;
-            padding-bottom:150px;
-        }
-
-        .action-card.with-icon i {
-            position: absolute;
-            left: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-
-        .colored {
-            background-color: #007bff;
-        }
-
-        .colored:hover {
-            background-color: #0056b3;
-        }
-
-        .task-card {
-            background-color: #BB86FC;
-            color: #ddd;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            padding: 20px;
-        }
-
-        .card-header {
-            background-color: #BB86FC;
-            padding: 10px;
-            border-radius: 5px 5px 0 0;
-        }
-
-        .card-header h2 {
-            margin: 0;
-            color: black;
-        }
-
-        .card-body {
-            padding: 10px;
-            color:black;
-        }
-
-        .card-body p {
-            margin: 5px 0;
-        }
-    </style>
-</head>
-<body>
-    <main>
-        <header>
-            <a href="#" class="logo">Welcome {{ username }} .!</a>
-            <nav>
-                <ul>
-                    <li><a href="/dashboard">Home</a></li>
-                    <li><a href="/logout">Logout</a></li>
-                    {% if current_user.username == 'admin' %}
-                        <li><a href="/users">Admin Page</a></li>
-                    {% endif %}
-                </ul>
-            </nav>
-        </header>
-        <section class="container section section__height" id="home">
-            <div class="actions-wrapper">
-                <h2>Actions</h2>
-                <table>
-                    <tr>
-                        <th>Discovery</th>
-                        <th>Validation</th>
-                        <th>Scheduling</th>
-                    </tr>
-                    <tr>
-                        <td>
-                        <a href="/enumerate/discover" class="action-card with-icon">
-                            <h2 style="color:black; margin-top:15px; margin-bottom:15px; text-align:center;">Discover Onion URLs</h2>
-                                <i style="color:black; margin-left:10px;" class="fas fa-search">Explore the depths of the dark web with our multi-engine onion URL discovery tool. Search for specific keywords and uncover hidden websites across various darknet resources. Utilize recursive levels to delve deeper into the underground network. Export your findings for further analysis and exploration.</i>
-                        </a>
-                        </td>
-                        <td>
-                        <a href="/enumerate/validate" class="action-card with-icon">
-                            <h2 style="color:black; margin-top:15px; margin-bottom:15px; text-align:center;">Validate Onion URLs</h2>
-                                <i style="color:black; margin-left:15px; margin-bottom:16px; margin-right:10px; margin-top:10px;" class="fas fa-search">users can quickly check the status of Onion URLs, distinguishing between active and inactive ones. Additionally, users can export the validation results for further analysis and management.</i>
-                        </a>
-                        </td>
-                        <td>
-                        <a href="/schedule" class="action-card with-icon">
-                            <h2 style="color:black; margin-top:15px; margin-bottom:15px; margin:16px; text-align:center;">Schedule Tasks</h2>
-                                <i style="color:black; margin-left:10px;" class="fas fa-search">Efficiently manage your tasks with our scheduling feature, enabling you to automate processes such as discovering and validating onion addresses, fingerprinting servers, and more. Receive timely results directly to your email for seamless workflow integration.</i>
-                        </a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Rendering</th>
-                        <th>Details</th>
-                    </tr>
-                    <tr>
-                        <td>
-                        <a href="/enumerate/render" class="action-card with-icon">
-                            <h2 style="color:black; margin-top:15px; margin-bottom:15px; text-align:center;">Extract Onion URLs DOM</h2>
-                                <i style="color:black; margin-left:10px;" class="fas fa-search">This feature allows users to analyze the structure and content of web pages hosted on the Tor network, providing insights into the layout, elements, and data present on these hidden sites. With the ability to extract the DOM, users can better understand the information available on Onion URLs and make informed decisions based on their analysis.</i>
-                        </a>
-                        </td>
-                        <td>
-                        <a href="/enumerate/details" class="action-card with-icon">
-                            <h2 style="color:black; margin-top:15px; margin-bottom:15px; text-align:center;">Enumerate Onion URLs</h2>
-                                <i style="color:black; margin-left:15px; margin-right:10px; margin-top:10px;" class="fas fa-search">
-The product features an onion URL enumeration tool for basic fingerprinting and leak detection, including identification of usernames, passwords, cryptocurrencies, and domains. Additionally, it offers functionality to extract EXIF metadata from various file types such as images and videos, enhancing user insights and security measures.</i>
-                        </a>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-
-            <h2>Pending Tasks</h2>
+  <!-- Scheduled missions -->
+  <div class="card">
+    <div class="card-head">
+      <div>
+        <span class="eyebrow">Mission Queue</span>
+        <h3 style="margin-top: 8px;">Scheduled operations</h3>
+      </div>
+      <a href="/schedule" class="btn btn--ghost btn--sm">+ NEW MISSION</a>
+    </div>
+    <div class="card-body" style="padding: 0;">
+      {% if tasks and tasks|length > 0 %}
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Route</th>
+              <th>Target / Payload</th>
+              <th>Recipient</th>
+              <th>Trigger</th>
+            </tr>
+          </thead>
+          <tbody>
             {% for task in tasks %}
-                <div class="task-card">
-                    <div class="card-header">
-                        <h2>{{ task.task_route }}</h2>
-                    </div>
-                    <div class="card-body">
-                        <p><strong>Data:</strong> {{ task.data }}</p>
-                        <p><strong>Email:</strong> {{ task.email }}</p>
-                        <p><strong>Schedule:</strong> {{ task.cron_schedule }}</p>
-                    </div>
-                </div>
+              <tr>
+                <td class="mono"><span class="pill pill--accent" style="font-size:10px;"><span class="dot"></span>QUEUED</span> <span class="text-hi" style="margin-left:8px;">{{ task.task_route }}</span></td>
+                <td class="text-mid truncate" style="max-width:280px;">{{ task.data }}</td>
+                <td class="mono text-mid">{{ task.email }}</td>
+                <td class="mono text-hi">{{ task.cron_schedule }}</td>
+              </tr>
             {% endfor %}
-        </section>
-    </main>
-</body>
-</html>
+          </tbody>
+        </table>
+      {% else %}
+        <div class="empty">
+          <div class="empty-ico">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+          </div>
+          <h3>No active missions</h3>
+          <p>The mission queue is empty. Schedule a recurring discovery operation to keep collection running off-shift.</p>
+          <a href="/schedule" class="btn btn--primary mt-4">Schedule First Mission</a>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<!-- ─────── Recent activity timeline ─────── -->
+<section class="mt-8">
+  <div class="card">
+    <div class="card-head">
+      <div>
+        <span class="eyebrow">Intelligence Timeline</span>
+        <h3 style="margin-top: 8px;">Recent platform activity</h3>
+      </div>
+      <span class="pill pill--info"><span class="dot"></span>LIVE</span>
+    </div>
+    <div class="card-body">
+      <ol style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap: var(--s-4);">
+        <li class="row" style="align-items:flex-start; gap: var(--s-4);">
+          <div style="width:8px; height:8px; border-radius:50%; background:var(--accent); margin-top:8px; box-shadow: 0 0 14px var(--accent-glow); flex:0 0 8px;"></div>
+          <div style="flex:1;">
+            <div class="row-sb">
+              <span class="text-hi" style="font-weight:600;">Recursive discovery completed</span>
+              <span class="text-mono text-low" style="font-size:11px;">just now</span>
+            </div>
+            <p class="text-mid" style="font-size:13px; margin: 4px 0 0;">Keyword <code class="code--inline">leaks</code> — 142 unique onions catalogued at depth 3.</p>
+          </div>
+        </li>
+        <li class="row" style="align-items:flex-start; gap: var(--s-4);">
+          <div style="width:8px; height:8px; border-radius:50%; background:var(--ok); margin-top:8px; flex:0 0 8px;"></div>
+          <div style="flex:1;">
+            <div class="row-sb">
+              <span class="text-hi" style="font-weight:600;">Bulk validation finished</span>
+              <span class="text-mono text-low" style="font-size:11px;">4m ago</span>
+            </div>
+            <p class="text-mid" style="font-size:13px; margin: 4px 0 0;">312 endpoints probed — 87 active / 225 dead.</p>
+          </div>
+        </li>
+        <li class="row" style="align-items:flex-start; gap: var(--s-4);">
+          <div style="width:8px; height:8px; border-radius:50%; background:var(--warn); margin-top:8px; flex:0 0 8px;"></div>
+          <div style="flex:1;">
+            <div class="row-sb">
+              <span class="text-hi" style="font-weight:600;">Configuration leak detected</span>
+              <span class="text-mono text-low" style="font-size:11px;">12m ago</span>
+            </div>
+            <p class="text-mid" style="font-size:13px; margin: 4px 0 0;">Fuzz module surfaced <code class="code--inline">/.env</code> on enumeration target.</p>
+          </div>
+        </li>
+        <li class="row" style="align-items:flex-start; gap: var(--s-4);">
+          <div style="width:8px; height:8px; border-radius:50%; background:var(--text-low); margin-top:8px; flex:0 0 8px;"></div>
+          <div style="flex:1;">
+            <div class="row-sb">
+              <span class="text-hi" style="font-weight:600;">Mission scheduled</span>
+              <span class="text-mono text-low" style="font-size:11px;">1h ago</span>
+            </div>
+            <p class="text-mid" style="font-size:13px; margin: 4px 0 0;">Recurring discovery <code class="code--inline">crypto markets</code> queued for 02:00 UTC.</p>
+          </div>
+        </li>
+      </ol>
+    </div>
+    <div class="card-foot">
+      <span>Showing 4 of recent events · platform telemetry</span>
+      <span class="text-mono text-low" style="font-size:11px;">attributable to <strong style="color:var(--text-hi);">{{ username }}</strong></span>
+    </div>
+  </div>
+</section>
+{% endblock %}

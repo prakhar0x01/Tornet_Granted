@@ -1,122 +1,90 @@
-<title>Add New User</title>
-<style>
-  header {
-  background-color: #333; /* Dark background */
-  color: #fff; /* Light text color */
-  padding: 20px; /* Padding for spacing */
-  display: flex; /* Arrange elements horizontally */
-  justify-content: space-between; /* Space elements evenly */
-  align-items: center; /* Align horizontally in the middle */
-}
+{% extends "base.html" %}
+{% block title %}Provision Operator · TORNET GRANTED{% endblock %}
+{% block crumb %}Provision Operator{% endblock %}
 
-h1 {
-  margin: 0; /* Remove default top margin */
-}
-
-nav {
-  display: flex; /* Arrange links horizontally */
-  list-style: none; /* Remove default bullet points */
-  padding: 0; /* Remove default padding */
-  margin: 0; /* Remove default margin */
-}
-
-nav a {
-  color: inherit; /* Inherit text color from header */
-  text-decoration: none; /* Remove underline */
-  margin-right: 20px; /* Spacing between links */
-  font-weight: bold; /* Make links stand out */
-}
-
-nav a:hover {
-  color: #ddd; /* Change text color on hover */
-}
-
-  /* Dark theme styles */
-  body {
-    background-color: #222;
-    color: #ddd;
-    font-family: sans-serif;
-  }
-
-  .DSG img {
-    /* Remove inline style */
-  }
-
-  .Mblock {
-    margin: 20px auto;
-    max-width: 500px; /* Adjust as needed */
-    background-color: #333;
-    border-radius: 5px;
-    padding: 20px;
-    color: #fff; /* Text color for the form */
-  }
-
-  .Mblock h1 {
-    text-align: center;
-    margin-bottom: 20px;
-  }
-
-  .Mblock label {
-    display: block;
-    margin-bottom: 5px;
-  }
-
-  .Mblock input[type="text"],
-  .Mblock input[type="password"] {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #444;
-    border-radius: 3px;
-    margin-bottom: 15px;
-  }
-
-  .Mblock input[type="submit"] {
-    background-color: #BB86FC; /* Button color */
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size:15;
-    color:black;
-  }
-
-  .Mblock input[type="submit"]:hover {
-    background-color: #AA7CFC;
-  }
-
-  .Mblock p.error,
-  .Mblock p.success {
-    color: #FF474C; /* Error message color */
-  }
-
-  .Mblock p.success {
-    color: #0f0; /* Success message color */
-  }
-</style>
-<header>
-  <h1>Add Users</h1>
-  <nav>
-    <a href="/dashboard">Home</a>
-    <a href="/users">Admin Portal</a>
-  </nav>
+{% block content %}
+<header class="page-head">
+  <div>
+    <div class="crumbs"><span>Console</span><span>/</span><span>Administration</span><span>/</span><span>Provision Operator</span></div>
+    <h1>Provision New Operator</h1>
+    <p class="lede">Issue access credentials for a new analyst. The platform generates a fresh API key and secret access key on creation.</p>
+  </div>
+  <div class="actions">
+    <a href="/users" class="btn btn--ghost">← Back to Roster</a>
+  </div>
 </header>
-<body>
-    <!--<h1 style="font-size:50px;text-align:center;">Add User</h1>-->
-    <div class="Mblock">
-      <div>
-        <form action="/add_user" method="post">
-          <h1>Add New User</h1>
-          <label for="username">Username:</label>
-          <input type="text" id="username" name="username" minlength="5">
-          <br>
-          <label for="password">Password:</label>
-          <input type="password" id="password" name="password" minlength="5">
-          <br>
-          <input type="submit" value="Add User">
-          <p class="error">{{ error }}</p>
-          <p class="success">{{ success }}</p>
-          </form>
+
+<section class="grid-2 mt-4" style="grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);">
+  <div class="card">
+    <div class="card-head">
+      <div><span class="eyebrow">Step 01 / 01</span><h3 style="margin-top:8px;">Operator credentials</h3></div>
+    </div>
+    <div class="card-body">
+      <form action="/add_user" method="POST" class="col gap-4">
+        <div class="field">
+          <label class="field-label" for="username">Operator ID</label>
+          <div class="input-wrap">
+            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/></svg>
+            <input class="input" type="text" id="username" name="username" minlength="5" required placeholder="e.g. analyst-04">
+          </div>
+          <span class="field-hint">Minimum 5 characters · must be unique across the platform.</span>
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="password">Initial credential</label>
+          <div class="input-wrap">
+            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <input class="input" type="password" id="password" name="password" minlength="5" required placeholder="••••••••">
+          </div>
+          <span class="field-hint">Hashed with SHA-256 at rest. Operator should rotate on first sign-in.</span>
+        </div>
+
+        <button class="btn btn--primary btn--lg mt-3" type="submit">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+          Provision Operator
+        </button>
+
+        {% if error %}
+        <div class="row gap-2 mt-3">
+          <span class="pill pill--threat"><span class="dot"></span>ERROR</span>
+          <span class="text-hi">{{ error }}</span>
+        </div>
+        {% endif %}
+        {% if success %}
+        <div class="row gap-2 mt-3">
+          <span class="pill pill--ok"><span class="dot"></span>OK</span>
+          <span class="text-hi">{{ success }}</span>
+        </div>
+        {% endif %}
+      </form>
     </div>
   </div>
-  </body>
+
+  <div class="card">
+    <div class="card-head">
+      <div><span class="eyebrow">Issuance Brief</span><h3 style="margin-top:8px;">What the operator receives</h3></div>
+    </div>
+    <div class="card-body col gap-4">
+      <div class="row gap-3">
+        <span class="sev sev--info">01</span>
+        <div><div class="text-hi" style="font-weight:600;">Operator ID</div><p class="text-mid" style="font-size:13px;margin:4px 0 0;">Their sign-in identifier across the console.</p></div>
+      </div>
+      <div class="row gap-3">
+        <span class="sev sev--info">02</span>
+        <div><div class="text-hi" style="font-weight:600;">API key</div><p class="text-mid" style="font-size:13px;margin:4px 0 0;">A unique <code class="code--inline">TORNET…</code> prefixed key for stateless programmatic access.</p></div>
+      </div>
+      <div class="row gap-3">
+        <span class="sev sev--medium">03</span>
+        <div><div class="text-hi" style="font-weight:600;">Secret access key</div><p class="text-mid" style="font-size:13px;margin:4px 0 0;">A 40-character secret rotated alongside the credential. Treat as a privileged secret.</p></div>
+      </div>
+      <div class="row gap-3">
+        <span class="sev sev--low">04</span>
+        <div><div class="text-hi" style="font-weight:600;">Tier-2 access</div><p class="text-mid" style="font-size:13px;margin:4px 0 0;">All recon modules &amp; mission scheduling — no administration privileges.</p></div>
+      </div>
+    </div>
+    <div class="card-foot">
+      <span>Only the <strong style="color:var(--text-hi);">admin</strong> director can provision new operators.</span>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,147 +1,148 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Schedule Tasks</title>
-    <style>
-        body {
-            background-color: #1e1e1e;
-            color: #ffffff;
-            font-family: Arial, sans-serif;
-            padding: 20px;
-        }
+{% extends "base.html" %}
+{% block title %}Mission Scheduler · TORNET GRANTED{% endblock %}
+{% block crumb %}Scheduler{% endblock %}
 
-        h1, h2 {
-            color: #f0f0f0;
-            border-bottom: 1px solid #333;
-            padding-bottom: 5px;
-            margin-top: 20px;
-        }
+{% block content %}
+<header class="page-head">
+  <div>
+    <div class="crumbs"><span>Console</span><span>/</span><span>Operations</span><span>/</span><span>Mission Scheduler</span></div>
+    <h1>Mission Scheduler</h1>
+    <p class="lede">Plan recurring or one-shot reconnaissance operations. Results are dispatched to the analyst inbox automatically once execution completes.</p>
+  </div>
+  <div class="actions"><span class="pill pill--accent"><span class="dot"></span>MODULE 06 · AUTOMATED</span></div>
+</header>
 
-        label {
-            display: block;
-            margin-top: 20px;
-            font-size:18px;
-        }
+{% if success %}<div class="card mt-4" style="border-color: rgba(33,208,122,0.32); background: var(--ok-soft);"><div class="card-body" style="padding:var(--s-4) var(--s-5);"><span class="text-up" style="color:var(--ok); font-size:11px; font-family:var(--font-mono);">MISSION QUEUED</span><p class="text-hi mt-2" style="margin:0;">{{ success }}</p></div></div>{% endif %}
+{% if error   %}<div class="card mt-4" style="border-color: rgba(255,59,92,0.32); background: var(--threat-soft);"><div class="card-body" style="padding:var(--s-4) var(--s-5);"><span class="text-up" style="color:var(--threat); font-size:11px; font-family:var(--font-mono);">MISSION FAILED</span><p class="text-hi mt-2" style="margin:0;">{{ error }}</p></div></div>{% endif %}
 
-        input[type="text"],
-        input[type="email"],
-        textarea,
-        select {
-            width: 30%;
-            padding: 10px;
-            border: 1px solid #333;
-            border-radius: 5px;
-            margin-top: 5px;
-            background-color: #333;
-            color: #ffffff;
-        }
+<section class="grid-2 mt-4" style="grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);">
 
-        input[type="datetime-local"] {
-            width: 30%;
-            padding: 10px;
-            border: 1px solid #333;
-            border-radius: 5px;
-            margin-top: 7px;
-            background-color: #333;
-            color: #ffffff;
-        }
+  <div class="card">
+    <div class="card-head">
+      <div><span class="eyebrow">Schedule · Discover Onion URLs</span><h3 style="margin-top:8px;">New mission brief</h3></div>
+    </div>
+    <div class="card-body">
+      <form action="/schedule" method="POST" class="col gap-4">
+        <input type="hidden" name="task_route" value="/enumerate/discover">
 
-        button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            background-color: #BB86FC;
-            color: black;
-            cursor: pointer;
-            margin-top: 10px;
-        }
+        <div class="field">
+          <label class="field-label" for="keywords">Search keyword</label>
+          <div class="input-wrap">
+            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+            <input class="input" type="text" name="keywords" id="keywords" required placeholder="e.g. ransomware leak forum">
+          </div>
+        </div>
 
-        button:hover {
-            background-color: BB86FC;
-        }
-    </style>
-</head>
-<body>
-    <h1>Schedule : Discover Onion URLs</h1>
-    <p style="color: green;">{{ success }}</p>
-    <hr>
-    <p style="color: red;">{{ error }}</p>
+        <div class="field">
+          <label class="field-label" for="level">Recursion depth</label>
+          <select class="select" id="level" name="level">
+            <option value="1">Level 1 — fast surface sweep</option>
+            <option value="2">Level 2 — single-hop enrichment</option>
+            <option value="3">Level 3 — multi-hop graph traversal</option>
+            <option value="4">Level 4 — deep recursive harvest</option>
+            <option value="5">Level 5 — maximum-coverage</option>
+          </select>
+        </div>
 
-    <!--<h2>Schedule : Discover Onion URLs</h2>-->
-    <form action="/schedule" method="POST">
-        <label for="discover_url">Search Keyword:</label>
-        <input type="text" name="keywords" id="keywords" required>
-        <input type="text" name="task_route" id="task_route" value="/enumerate/discover" hidden><br>
-        <label for="discover_depth">Depth:</label>
-        <select id="level" name="level">
-            <option value="1">Depth level(default 1)</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-        </select>
-        
-        <label for="email">Email &nbsp;&nbsp;<i>(Result send to)</i></label>
-        <input type="email" name="email" id="email" required>
-        
-        <label for="discover_schedule">Schedule Date & Time:</label>
-        
-        <input type="datetime-local" name="scheduled_time" id="scheduled_time" required><br><br>
-        <button type="submit">Schedule Discovery</button><br>
-    </form>
+        <div class="grid-2">
+          <div class="field">
+            <label class="field-label" for="email">Result delivery</label>
+            <div class="input-wrap">
+              <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><polyline points="4 4 12 13 20 4"/></svg>
+              <input class="input" type="email" name="email" id="email" required placeholder="analyst@agency.gov">
+            </div>
+          </div>
 
-    <!-- Other forms can be styled similarly -->
-    <!--
-     
-    <h2>Validate URLs</h2>
-    <form action="/enumerate/validate" method="POST">
-        <label for="urls">URLs (separate by line):</label>
-        <textarea name="urls" id="urls" required></textarea>
-        <br>
-        <button type="submit">Validate URLs</button>
-    </form>
+          <div class="field">
+            <label class="field-label" for="scheduled_time">Trigger date / time</label>
+            <input class="input" type="datetime-local" name="scheduled_time" id="scheduled_time" required>
+          </div>
+        </div>
 
-    <h2>Extract DOM</h2>
-    <form action="/enumerate/render" method="POST">
-        <label for="extract_url">URL:</label>
-        <input type="text" name="extract_url" id="extract_url" required>
-        <br>
-        <button type="submit">Extract DOM</button>
-    </form>
+        <div class="row mt-3 gap-3">
+          <button class="btn btn--primary" type="submit">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+            Queue Mission
+          </button>
+          <span class="text-low" style="font-size:12px;">⚠ Set Gmail SMTP credentials in <code class="code--inline">config.txt</code> for delivery.</span>
+        </div>
+      </form>
+    </div>
+  </div>
 
-    <h2>Fingerprint Server</h2>
-    <form action="/enumerate/Fingerprint" method="POST">
-        <label for="fingerprint_url">URL:</label>
-        <input type="text" name="fingerprint_url" id="fingerprint_url" required>
-        <br>
-        <button type="submit">Fingerprint Server</button>
-    </form>
+  <div class="card">
+    <div class="card-head">
+      <div><span class="eyebrow">Briefing</span><h3 style="margin-top:8px;">How scheduling works</h3></div>
+    </div>
+    <div class="card-body col gap-4">
+      <div class="row gap-3">
+        <span class="sev sev--info">01</span>
+        <div><div class="text-hi" style="font-weight:600;">Plan</div><p class="text-mid" style="font-size:13px; margin:4px 0 0;">Pick the recon operation, the keyword and the trigger time.</p></div>
+      </div>
+      <div class="row gap-3">
+        <span class="sev sev--info">02</span>
+        <div><div class="text-hi" style="font-weight:600;">Queue</div><p class="text-mid" style="font-size:13px; margin:4px 0 0;">APScheduler holds the mission until the trigger fires.</p></div>
+      </div>
+      <div class="row gap-3">
+        <span class="sev sev--info">03</span>
+        <div><div class="text-hi" style="font-weight:600;">Execute</div><p class="text-mid" style="font-size:13px; margin:4px 0 0;">Collection traverses the Tor circuit at the scheduled hour.</p></div>
+      </div>
+      <div class="row gap-3">
+        <span class="sev sev--medium">04</span>
+        <div><div class="text-hi" style="font-weight:600;">Deliver</div><p class="text-mid" style="font-size:13px; margin:4px 0 0;">Results are SMTP-dispatched to the recipient inbox on completion.</p></div>
+      </div>
+    </div>
+    <div class="card-foot">
+      <span>Currently supported: <strong style="color:var(--text-hi);">Discover Onion URLs</strong></span>
+      <span class="text-mono text-low" style="font-size:11px;">APSCHEDULER · CRON</span>
+    </div>
+  </div>
+</section>
 
-    <h2>Check Open Directories & Common Files</h2>
-    <form action="/enumerate/check_dir" method="POST">
-        <label for="opendir_url">URL:</label>
-        <input type="text" name="opendir_url" id="opendir_url" required>
-        <br>
-        <button type="submit">Check Open Directories & Common Files</button>
-    </form>
-
-    <h2>Check EXIF Metadata</h2>
-    <form action="/enumerate/exif_metadata" method="POST">
-        <label for="exif_url">URL:</label>
-        <input type="text" name="exif_url" id="exif_url" required>
-        <br>
-        <button type="submit">Check EXIF Metadata</button>
-    </form>
-
-    <h2>Check Crypto Addresses</h2>
-    <form action="/enumerate/discover_crypto" method="POST">
-        <label for="crypto_url">URL:</label>
-        <input type="text" name="crypto_url" id="crypto_url" required>
-        <br>
-        <button type="submit">Check Crypto Addresses</button>
-    </form>
-    -->
-</body>
-</html>
+<section class="card mt-6">
+  <div class="card-head">
+    <div><span class="eyebrow">Mission Catalogue</span><h3 style="margin-top:8px;">Schedulable operations</h3></div>
+    <span class="text-mono text-low" style="font-size:11px;">{{ tasks|list|length if tasks else 0 }} TASK TYPES REGISTERED</span>
+  </div>
+  <div class="card-body" style="padding:0;">
+    {% if tasks %}
+      <table class="table">
+        <thead>
+          <tr>
+            <th style="width:48px;">#</th>
+            <th>Route</th>
+            <th>Description</th>
+            <th style="width:160px;">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for route, spec in tasks %}
+            <tr>
+              <td class="row-num">{{ '%02d' % loop.index }}</td>
+              <td class="mono text-hi">{{ route }}</td>
+              <td class="text-mid">{{ spec.description if spec.description else '—' }}</td>
+              <td>
+                {% if route == '/enumerate/discover' %}
+                  <span class="pill pill--ok"><span class="dot"></span>SCHEDULABLE</span>
+                {% else %}
+                  <span class="pill"><span class="dot"></span>ROADMAP</span>
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <div class="empty">
+        <div class="empty-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
+        <h3>No mission types registered</h3>
+        <p>Add entries to the platform <code class="code--inline">tasks</code> catalogue to make them schedulable.</p>
+      </div>
+    {% endif %}
+  </div>
+  <div class="card-foot">
+    <span>Live mission queue · view from the <a href="/dashboard" style="color:var(--accent);">Command Center</a>.</span>
+    <span class="text-mono text-low" style="font-size:11px;">APSCHEDULER · BACKGROUND</span>
+  </div>
+</section>
+{% endblock %}

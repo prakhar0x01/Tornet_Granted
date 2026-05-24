@@ -1,100 +1,103 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
+{% block title %}Operator Sign-In · TORNET GRANTED{% endblock %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tornet-Granted Login</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #222;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
+{% block layout %}
+<div class="login">
 
-        .login-container {
-            background-color: #333;
-            border-radius: 8px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-            padding: 40px;
-            width: 400px;
-            text-align: center;
-        }
-
-        .login-container h1 {
-            color: #fff;
-            margin-bottom: 30px;
-        }
-
-        .login-form label {
-            display: block;
-            text-align: left;
-            margin-bottom: 10px;
-            color: #ddd;
-        }
-
-        .login-form input[type="text"],
-        .login-form input[type="password"] {
-            width: 95%;
-            padding: 10px;
-            margin-bottom: 20px;
-            border: none;
-            border-radius: 4px;
-            background-color: #444;
-            color: #ddd;
-            font-size: 16px;
-        }
-
-        .login-form input[type="text"]::placeholder,
-        .login-form input[type="password"]::placeholder {
-            color: #999;
-        }
-
-        .login-form input[type="submit"] {
-            background-color: #BB86FC;
-            color: #black;
-            border: none;
-            padding: 12px 0;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            width: 100%;
-            transition: background-color 0.3s ease;
-        }
-
-        .login-form input[type="submit"]:hover {
-            background-color: #BB86FC;
-        }
-
-        .login-form input[type="submit"]:focus {
-            outline: none;
-        }
-
-        .login-form .footer-text {
-            color: white;
-            margin-top: 20px;
-        }
-    </style>
-</head>
-
-<body>
-    <div class="login-container">
-        <h1>Tornet-Granted Login</h1>
-        <form class="login-form" action="/login" method="post">
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" placeholder="Enter your username" required>
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" placeholder="Enter your password" required>
-            <input type="submit" value="Login">
-        </form>
-        <p class="footer-text" style="color:white;">Don't have an account? Contact your admin.</p>
+  <!-- ─────── Left tactical hero ─────── -->
+  <section class="login-hero" aria-hidden="true">
+    <div class="lh-top">
+      {% include "partials/_brand.html" %}
+      <span class="pill pill--accent" style="margin-left:auto;"><span class="dot"></span>SECURE CHANNEL</span>
     </div>
-</body>
 
-</html>
+    <div>
+      <span class="eyebrow">Intelligence Console · Restricted Access</span>
+      <h1>Operator authentication required to enter the console.</h1>
+      <p class="lh-sub">
+        Every collection, every probe and every artefact you touch is
+        attributable to your operator identity. Authenticate to begin your
+        mission.
+      </p>
 
+      <div class="lh-status">
+        <span class="text-up text-low" style="font-size:11px;">TOR DAEMON</span>
+        <span class="row gap-2 text-mono" style="font-size:13px; color:var(--ok);"><span class="status-dot"></span>UP · circuit 9050</span>
+
+        <span class="text-up text-low" style="font-size:11px;">SCHEDULER</span>
+        <span class="row gap-2 text-mono" style="font-size:13px; color:var(--ok);"><span class="status-dot"></span>READY</span>
+
+        <span class="text-up text-low" style="font-size:11px;">DATA STORE</span>
+        <span class="row gap-2 text-mono" style="font-size:13px; color:var(--ok);"><span class="status-dot"></span>SQLITE · users.db</span>
+
+        <span class="text-up text-low" style="font-size:11px;">EXIF ENGINE</span>
+        <span class="row gap-2 text-mono" style="font-size:13px; color:var(--ok);"><span class="status-dot"></span>ARMED</span>
+      </div>
+
+      <div class="scan" role="log" aria-label="Console boot log">
+        <div class="scan-line"></div>
+        <div class="row-line"><span class="ts">[00:00:01]</span>  <span class="ok">OK</span>  initialising Tor SOCKS5 proxy <span style="color:var(--text-hi);">127.0.0.1:9050</span></div>
+        <div class="row-line"><span class="ts">[00:00:02]</span>  <span class="ok">OK</span>  reconnaissance modules loaded <span style="color:var(--text-hi);">06/06</span></div>
+        <div class="row-line"><span class="ts">[00:00:02]</span>  <span class="ok">OK</span>  background scheduler armed</div>
+        <div class="row-line"><span class="ts">[00:00:03]</span>  <span class="warn">⚠</span>  awaiting operator credential …</div>
+      </div>
+    </div>
+
+    <div class="text-mono text-low" style="font-size:11px;">
+      AUTH-CHANNEL · 1F4D3A · DEFCON 5 · BUILD 2.0
+    </div>
+  </section>
+
+  <!-- ─────── Right auth card ─────── -->
+  <section class="login-form-wrap">
+    <div class="auth-card">
+      <span class="eyebrow">Step 01 / 01</span>
+      <h2 class="mt-2">Operator sign-in</h2>
+      <p class="text-mid mt-3" style="font-size:13px;">
+        Provide your credentials issued by the platform director. Need access?
+        Contact your administrator — this console does not accept self-registration.
+      </p>
+
+      <form class="col gap-4 mt-6" action="/login" method="POST" autocomplete="off">
+        <div class="field">
+          <label class="field-label" for="username">Operator ID</label>
+          <div class="input-wrap">
+            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/></svg>
+            <input class="input" id="username" name="username" type="text" required autocomplete="username" placeholder="e.g. admin" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="password">Credential</label>
+          <div class="input-wrap">
+            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <input class="input" id="password" name="password" type="password" required autocomplete="current-password" placeholder="••••••••" />
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn--primary btn--lg btn--block mt-3">
+          Authenticate &amp; Enter Console
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </button>
+      </form>
+
+      <div class="div-label">Default Bootstrap Operator</div>
+      <div class="card" style="background:var(--surface-0); padding: var(--s-4);">
+        <div class="row-sb" style="font-family:var(--font-mono); font-size:12px;">
+          <span class="text-low">USER</span>
+          <span class="text-hi">admin</span>
+        </div>
+        <div class="row-sb mt-2" style="font-family:var(--font-mono); font-size:12px;">
+          <span class="text-low">PASS</span>
+          <span class="text-hi">admin</span>
+        </div>
+        <p class="text-low mt-3" style="font-size:11px;">⚠ Rotate the bootstrap credential immediately after first sign-in.</p>
+      </div>
+
+      <p class="text-low text-mono mt-6" style="font-size:11px; text-align:center; letter-spacing: var(--tracking-wide); text-transform: uppercase;">
+        ← <a href="/home" style="color:inherit;">Return to public site</a>
+      </p>
+    </div>
+  </section>
+</div>
+{% endblock %}

@@ -1,112 +1,98 @@
-<!DOCTYPE html>
-<html lang="en">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/default.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/highlight.min.js"></script>
-<!-- Initialize highlight.js -->
-<script>hljs.initHighlightingOnLoad();</script>
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Onion URL DOM</title>
-  <style>
-    /* Dark theme styles */
-    body {
-      background-color: #17191c;
-      color: #adb5bd;
-      text-align: center;
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
+{% extends "base.html" %}
+{% block title %}DOM Extractor · TORNET GRANTED{% endblock %}
+{% block crumb %}DOM Extractor{% endblock %}
 
-    header {
-      background-color: #333;
-      padding: 20px 0;
-    }
-    
-    pre {
-      white-space: pre-wrap;
-      word-wrap: break-word;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      background-color: #f8f8f8;
-      text-align:left;
-    }
+{% block head %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+{% endblock %}
 
-    header h1 {
-      color: #dfecf0;
-    }
+{% block content %}
+<header class="page-head">
+  <div>
+    <div class="crumbs"><span>Console</span><span>/</span><span>Reconnaissance</span><span>/</span><span>DOM Extractor</span></div>
+    <h1>DOM Extraction</h1>
+    <p class="lede">Pull the rendered document model of any hidden service. Useful for inspecting markup, asset references, embedded scripts and obfuscated payloads — all without exposing a real browser to the target.</p>
+  </div>
+  <div class="actions"><span class="pill pill--info"><span class="dot"></span>MODULE 03 · STATIC FETCH</span></div>
+</header>
 
-    hr {
-      border: 1px solid #dfecf0;
-    }
+{% if error %}
+<div class="card mt-4" style="border-color: rgba(255,59,92,0.32); background: var(--threat-soft);">
+  <div class="card-body" style="padding:var(--s-4) var(--s-5);">
+    <span class="text-up" style="color:var(--threat); font-size:11px; font-family:var(--font-mono);">ERROR</span>
+    <p class="text-hi mt-2" style="margin:0;">{{ error }}</p>
+  </div>
+</div>
+{% endif %}
 
-    main {
-      padding: 20px;
-    }
-
-    .form-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    form {
-      margin-bottom: 20px;
-    }
-
-    label {
-      color: #adb5bd;
-    }
-
-    input[type="text"], button, .btn {
-      margin: 5px;
-      padding: 8px 20px;
-      border: none;
-      border-radius: 5px;
-      background-color: #BB86FC;
-      color: black;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-
-    input[type="text"] {
-      width: 300px;
-    }
-
-    button:hover, .btn:hover {
-      background-color: #BB86FC;
-    }
-
-    p.error {
-      color: red;
-    }
-  </style>
-</head>
-<body>
-    <header>
-        <h1>Render DOM<i>&nbsp;(Document Object Model)</i></h1>
-        <hr>
-    </header>
-    <main>
-        <div class="form-container">
-            <form action="/enumerate/render" method="POST">
-                <label for="onion_url">Onion URL:</label>
-                <input type="text" style="background-color:white;" id="onion_url" name="onion_url" placeholder="http://example.onion">
-                <br><br>
-                <button type="submit">Render Page</button>
-                <p class="error">{{ error }}</p>
-                <p><i>Note : We made this as fast as possible, but due to TOR relays & end server configuration, it may take more time than usual.</i></p>
-            </form>
-            
-            <h2><i style="color:#0f0;">{{onion_url}}</i></h2><br><br>
-           
-                {% if dom_content %}
-                    {{ dom_content | safe }}
-                {% endif %}
-            
+<section class="card mt-4">
+  <div class="card-head">
+    <div><span class="eyebrow">Target Selection</span><h3 style="margin-top:8px;">Fetch onion document</h3></div>
+  </div>
+  <div class="card-body">
+    <form action="/enumerate/render" method="POST" class="row gap-3" style="align-items:flex-end; flex-wrap:wrap;">
+      <div class="field" style="flex: 1 1 360px;">
+        <label class="field-label" for="onion_url">Onion URL</label>
+        <div class="input-wrap">
+          <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3v18"/></svg>
+          <input class="input input--mono" type="text" id="onion_url" name="onion_url" placeholder="http://example.onion" {% if onion_url %}value="{{ onion_url }}"{% endif %}>
         </div>
-    </main>
-</body>
-</html>
+      </div>
+      <button class="btn btn--primary" type="submit">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        Extract DOM
+      </button>
+    </form>
+    <p class="text-low mt-3" style="font-size:12px;">⚠ Round-trip time depends on Tor circuit health, target latency and server-side throttling.</p>
+  </div>
+</section>
+
+{% if dom_content %}
+<section class="card mt-6">
+  <div class="card-head">
+    <div>
+      <span class="eyebrow">Document Model</span>
+      <h3 style="margin-top:8px;">Rendered source · <span class="text-mono text-low" style="font-size:13px; text-transform:none; letter-spacing:0;">{{ onion_url }}</span></h3>
+    </div>
+    <div class="row gap-2">
+      <span class="pill pill--ok"><span class="dot"></span>200 OK</span>
+      <button class="btn btn--ghost btn--sm" data-copy-target="#dom-raw">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Copy Source
+      </button>
+    </div>
+  </div>
+  <div class="card-body" style="padding: 0;">
+    <div id="dom-rendered" class="code" style="margin:0; border:none; border-radius:0; max-height:75vh;">
+      {{ dom_content | safe }}
+    </div>
+    <textarea id="dom-raw" class="hidden" readonly></textarea>
+  </div>
+  <div class="card-foot">
+    <span>Fetched via Tor SOCKS5 · static fetch · no JS execution on target</span>
+    <span class="text-mono text-low" style="font-size:11px;">DOM-EXT v1</span>
+  </div>
+</section>
+{% else %}
+<section class="card mt-6">
+  <div class="empty">
+    <div class="empty-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+    <h3>Awaiting target</h3>
+    <p>Provide an onion URL above to fetch and render its document model.</p>
+  </div>
+</section>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>
+  // Populate hidden textarea with rendered text for copy-to-clipboard
+  (function () {
+    const r = document.getElementById("dom-rendered");
+    const t = document.getElementById("dom-raw");
+    if (r && t) t.value = r.innerText;
+    if (window.hljs) document.querySelectorAll("#dom-rendered code").forEach(b => window.hljs.highlightElement(b));
+  })();
+</script>
+{% endblock %}

@@ -1,137 +1,90 @@
-<style>
-header {
-  background-color: #333; /* Dark background */
-  color: #fff; /* Light text color */
-  padding: 20px; /* Padding for spacing */
-  display: flex; /* Arrange elements horizontally */
-  justify-content: space-between; /* Space elements evenly */
-  align-items: center; /* Align horizontally in the middle */
-}
+{% extends "base.html" %}
+{% block title %}Rotate Credential · TORNET GRANTED{% endblock %}
+{% block crumb %}Rotate Credential{% endblock %}
 
-h1 {
-  margin: 0; /* Remove default top margin */
-}
-
-nav {
-  display: flex; /* Arrange links horizontally */
-  list-style: none; /* Remove default bullet points */
-  padding: 0; /* Remove default padding */
-  margin: 0; /* Remove default margin */
-}
-
-nav a {
-  color: inherit; /* Inherit text color from header */
-  text-decoration: none; /* Remove underline */
-  margin-right: 20px; /* Spacing between links */
-  font-weight: bold; /* Make links stand out */
-}
-
-nav a:hover {
-  color: #ddd; /* Change text color on hover */
-}
-
-  /* Dark theme styles */
-  body {
-    background-color: #222;
-    color: #ddd;
-    font-family: sans-serif;
-  }
-
-  /* Optional: Center the title if there's no logo */
-  header:empty {
-    justify-content: center;
-  }
-
-  /* Main content styles */
-  main {
-    padding: 20px;
-  }
-
-  .Mblock {
-    margin: 0 auto;
-    max-width: 500px; /* Adjust as needed */
-    background-color: #333;
-    border-radius: 5px;
-    padding: 20px;
-    color: #fff; /* Text color for the form */
-  }
-
-  .Mblock h2 {
-    text-align: center;
-    margin-bottom: 20px;
-  }
-
-  /* ... rest of your form styles ... */
-
-.Mblock label {
-    display: block;
-    margin-bottom:10;  
-    font-size:15px;
-    margin-top:15;
-  }
-
-  .Mblock input[type="text"],
-  .Mblock input[type="password"] {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #444;
-    border-radius: 3px;
-    margin-bottom: 15px;
-   }
-
-  .Mblock input[type="submit"] {
-    background-color: #BB86FC; /* Button color */
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    color:black;
-    font-size:15px;
-  }
-
-  .Mblock input[type="submit"]:hover {
-    background-color: #AA7CFC;
-  }
-
-  .Mblock p.error,
-  .Mblock p.success {
-    color: #FF474C; /* Error message color */
-  }
-
-  .Mblock p.success {
-    color: #0f0; /* Success message color */
-  }
-
-  /* FontAwesome icons (optional) */
-  .fa {
-    margin-right: 5px;
-  }
-</style>
-<header>
-  <h1>Update Users Password</h1>
-  <nav>
-    <a href="/dashboard">Home</a>
-    <a href="/users">Admin Portal</a>
-  </nav>
+{% block content %}
+<header class="page-head">
+  <div>
+    <div class="crumbs"><span>Console</span><span>/</span><span>Administration</span><span>/</span><span>Credentials</span></div>
+    <h1>Rotate Operator Credential</h1>
+    <p class="lede">Issue a fresh password for an existing operator. Previous credential is invalidated immediately on submission.</p>
+  </div>
+  <div class="actions">
+    <a href="/users" class="btn btn--ghost">← Back to Roster</a>
+  </div>
 </header>
-<body>
-  <main>
-    <!--<h1 style="font-size:50px;text-align:center;">Update Users Password</h1>-->
-    <div class="Mblock">
 
-      <form action="{{ url_for('update_password') }}" method="post">
-        <label for="username"><b>Username:<b></label>
-        <input type="text" id="username" name="username" required>
-        <label for="password"><b>New Password:<b></label>
-        <input type="password" id="password" name="password" required><br>
-        <br><input type="submit" value="Update Password">
-        <p class="success">{{ success }}</p>
-        <p class="error">{{ error }}</p>
+<section class="grid-2 mt-4">
+  <div class="card">
+    <div class="card-head">
+      <div><span class="eyebrow">Credential Rotation</span><h3 style="margin-top:8px;">Set new password</h3></div>
+    </div>
+    <div class="card-body">
+      <form action="{{ url_for('update_password') }}" method="POST" class="col gap-4">
+        <div class="field">
+          <label class="field-label" for="username">Operator ID</label>
+          <div class="input-wrap">
+            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/></svg>
+            <input class="input" type="text" id="username" name="username" required placeholder="operator username">
+          </div>
+        </div>
+        <div class="field">
+          <label class="field-label" for="password">New credential</label>
+          <div class="input-wrap">
+            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <input class="input" type="password" id="password" name="password" required placeholder="••••••••">
+          </div>
+          <span class="field-hint">Hashed with SHA-256 before persistence. Old credential is invalidated immediately.</span>
+        </div>
+
+        <button class="btn btn--primary btn--lg mt-3" type="submit">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+          Rotate Credential
+        </button>
+
+        {% if success %}
+        <div class="row gap-2 mt-3">
+          <span class="pill pill--ok"><span class="dot"></span>OK</span>
+          <span class="text-hi">{{ success }}</span>
+        </div>
+        {% endif %}
+        {% if error %}
+        <div class="row gap-2 mt-3">
+          <span class="pill pill--threat"><span class="dot"></span>ERROR</span>
+          <span class="text-hi">{{ error }}</span>
+        </div>
+        {% endif %}
       </form>
     </div>
-    </main>
+  </div>
 
-  <script src="https://kit.fontawesome.com/a15a706d7f.js" crossorigin="anonymous"></script>
-</body>
-
+  <div class="card">
+    <div class="card-head">
+      <div><span class="eyebrow">Rotation Protocol</span><h3 style="margin-top:8px;">Best practices</h3></div>
+    </div>
+    <div class="card-body col gap-4">
+      <div class="row gap-3">
+        <span class="sev sev--medium">PROTOCOL</span>
+        <div>
+          <div class="text-hi" style="font-weight:600;">Notify the operator out-of-band.</div>
+          <p class="text-mid" style="font-size:13px; margin: 4px 0 0;">Deliver the new credential through a secondary channel (PGP, Signal, encrypted SMS).</p>
+        </div>
+      </div>
+      <div class="row gap-3">
+        <span class="sev sev--medium">PROTOCOL</span>
+        <div>
+          <div class="text-hi" style="font-weight:600;">Force first-login rotation.</div>
+          <p class="text-mid" style="font-size:13px; margin: 4px 0 0;">Rotated credentials are issued as initial — the operator should set their own immediately.</p>
+        </div>
+      </div>
+      <div class="row gap-3">
+        <span class="sev sev--high">CAUTION</span>
+        <div>
+          <div class="text-hi" style="font-weight:600;">API keys do not rotate here.</div>
+          <p class="text-mid" style="font-size:13px; margin: 4px 0 0;">To rotate API or secret access keys, revoke and re-provision the operator from the Roster.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

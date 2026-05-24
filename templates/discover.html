@@ -1,188 +1,183 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Discover Onion URLs</title>
-  <style>
-    /* Dark theme styles */
-    body {
-      background-color: #222;
-      color: #ddd;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0; /* Remove default margin for full-page layout */
-      display: flex; /* Use flexbox for container */
-      min-height: 100vh; /* Set minimum height to fill viewport */
-      justify-content: center; /* Center content horizontally */
-      align-items: center; /* Center content vertically */
-    }
+{% extends "base.html" %}
+{% block title %}Discover · TORNET GRANTED{% endblock %}
+{% block crumb %}Discover{% endblock %}
 
-    /* Main content styles */
-    main {
-      width: 80%; /* Adjust main content width as needed */
-      margin-top: 20px; /* Add margin space at the top */
-    }
+{% block content %}
+<header class="page-head">
+  <div>
+    <div class="crumbs"><span>Console</span><span>/</span><span>Reconnaissance</span><span>/</span><span>Discover</span></div>
+    <h1>Discover Onion URLs</h1>
+    <p class="lede">Recursive keyword scraping across dark-web indexers. Tune depth to balance breadth and runtime. All collection traverses the local Tor SOCKS5 circuit.</p>
+  </div>
+  <div class="actions">
+    <span class="pill pill--accent"><span class="dot"></span>MODULE 01 · OPERATIONAL</span>
+  </div>
+</header>
 
-    /* Form styles */
-    form {
-      margin-bottom: 20px; /* Add margin space at the bottom */
-    }
+{% if message %}
+<div class="card mt-4" style="border-color: rgba(255,176,32,0.32); background: var(--warn-soft);">
+  <div class="card-body" style="padding: var(--s-4) var(--s-5);">
+    <span class="text-up" style="color: var(--warn); font-size: 11px; font-family: var(--font-mono);">NOTICE</span>
+    <p class="text-hi mt-2" style="margin:0;">{{ message }}</p>
+  </div>
+</div>
+{% endif %}
+{% if error %}
+<div class="card mt-4" style="border-color: rgba(255,59,92,0.32); background: var(--threat-soft);">
+  <div class="card-body" style="padding: var(--s-4) var(--s-5);">
+    <span class="text-up" style="color: var(--threat); font-size: 11px; font-family: var(--font-mono);">ERROR</span>
+    <p class="text-hi mt-2" style="margin:0;">{{ error }}</p>
+  </div>
+</div>
+{% endif %}
 
-    label {
-      font-weight: bold;
-    }
+<section class="grid-2 mt-4" style="grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);">
 
-    input[type="text"],
-    select {
-      margin-bottom: 10px;
-      padding: 8px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-      width: 100%;
-    }
+  <!-- ── Search panel ── -->
+  <div class="card">
+    <div class="card-head">
+      <div>
+        <span class="eyebrow">Collection Parameters</span>
+        <h3 style="margin-top: 8px;">New discovery operation</h3>
+      </div>
+    </div>
+    <div class="card-body">
+      <form action="/enumerate/discover" method="POST" class="col gap-5">
+        <div class="field">
+          <label class="field-label" for="keywords">Search Keyword</label>
+          <div class="input-wrap">
+            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+            <input class="input" type="text" id="keywords" name="keywords" placeholder="markets, leaks, crypto, forums…" required>
+          </div>
+          <span class="field-hint">Common queries: <code class="code--inline">drugs</code> · <code class="code--inline">hacking</code> · <code class="code--inline">wiki</code> · <code class="code--inline">crypto</code> · <code class="code--inline">markets</code></span>
+        </div>
 
-    input[type="submit"] {
-      background-color: #BB86FC;
-      color: black;
-      padding: 12px 20px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 1em;
-      transition: background-color 0.3s ease;
-    }
+        <input type="hidden" id="api_key" name="api_key" value="{{ api_key }}">
+        <input type="hidden" id="secret_access_key" name="secret_access_key" value="{{ secret_access_key }}">
 
-    input[type="submit"]:hover {
-      background-color: #45a049;
-    }
+        <div class="field">
+          <label class="field-label" for="level">Recursion Depth</label>
+          <select class="select" id="level" name="level">
+            <option value="1">Level 1 — fast surface sweep (recommended)</option>
+            <option value="2">Level 2 — single-hop enrichment</option>
+            <option value="3">Level 3 — multi-hop graph traversal</option>
+            <option value="4">Level 4 — deep recursive harvest</option>
+            <option value="5">Level 5 — maximum-coverage (long runtime)</option>
+          </select>
+          <span class="field-hint">⚠ Higher depths exponentially increase runtime. Depth ≥ 3 may take several minutes per circuit.</span>
+        </div>
 
-    /* Table styles */
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 20px;
-      text-align:center;
-    }
+        <button type="submit" class="btn btn--primary btn--lg">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          Initiate Discovery
+        </button>
+      </form>
+    </div>
+  </div>
 
-    th, td {
-      border: 1px solid #ddd;
-      padding: 8px;
-      text-align: center;
-    }
+  <!-- ── Export & summary panel ── -->
+  <div class="col gap-4">
+    <div class="card">
+      <div class="card-head">
+        <div>
+          <span class="eyebrow">Collection Summary</span>
+          <h3 style="margin-top:8px;">Live operation status</h3>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="kpi-strip" style="grid-template-columns: 1fr 1fr;">
+          <div class="kpi kpi--accent">
+            <div class="kpi-label">Unique Endpoints</div>
+            <div class="kpi-value">{{ urls|length if urls else 0 }}</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-label">Total Surfaced</div>
+            <div class="kpi-value">{{ total or 0 }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-    th {
-      background-color: #333;
-      color: #ddd;
-      font-size: 1.2em;
-      text-transform: uppercase;
-    }
+    <div class="card">
+      <div class="card-head">
+        <div>
+          <span class="eyebrow">Export</span>
+          <h3 style="margin-top:8px;">Intelligence packaging</h3>
+        </div>
+      </div>
+      <div class="card-body">
+        <form action="/enumerate/discover" method="POST" class="col gap-4">
+          <div class="field">
+            <label class="field-label" for="export_format">Format</label>
+            <select class="select" id="export_format" name="export_format">
+              <option value="txt">TXT — flat list of onions</option>
+              <option value="json">JSON — structured payload</option>
+              <option value="pdf">PDF — analyst-ready report</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn--ghost">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Export Findings
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
 
-    /* Link list styles */
-    ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-
-    li {
-      margin-bottom: 10px;
-    }
-
-    a {
-      color: #4CAF50;
-      text-decoration: none;
-    }
-
-    button {
-      padding: 8px 12px;
-      border: none;
-      border-radius: 5px;
-      background-color: #BB86FC;
-      color: black;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #555;
-    }
-  </style>
-</head>
-<body>
-<main>
-   <h1>Discover Onion Links..</h1>
-    <hr>
-    <form action="/enumerate/discover" method="post">
-      <label for="keyword">Search Keyword:&nbsp;&nbsp;&nbsp;&nbsp;<i>(drugs, hacking, wiki, crypto, markets)</i></label><br><br>
-      <input type="text" id="keywords" name="keywords" required>
-      <br>
-      <input type="text" id="api_key" name="api_key" value ="{{ api_key }}" hidden required>
-      <input type="text" id="secret_access_key" name="secret_access_key" value="{{ secret_access_key }}" hidden required>
-      <br>
-      <select id="level" name="level">
-        <option value="1">Depth level(default 1)</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-      </select><br>
-      <br><i>Note: We made this as fast as possible, The more <b>higher value of Depth level</b> you choose <b>the longer time it will take to process</b>.</i><br>
-      <br><input type="submit" value="Discover Onion Links">
-      <p>{{ message }}</p>
-    </form>
-    <p style="text-align: center;">{{ total }}</p>
-    <hr>
-    <form action="/enumerate/discover" method="POST"><br>
-      <label for="export_format">Export Format:</label><br><br>
-      <select id="export_format" name="export_format">
-        <option value="txt">TXT</option>
-        <option value="json">JSON</option>
-        <option value="pdf">PDF</option>
-      </select><br>
-      <input type="submit" value="Export">
-    </form>
-
-    <hr>
-    <table>
-      <thead>
-        <tr>
-          <th>Links</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for url in urls %}
+<!-- ── Results table ── -->
+<section class="card mt-6">
+  <div class="card-head">
+    <div>
+      <span class="eyebrow">Catalogued Endpoints</span>
+      <h3 style="margin-top:8px;">Discovered onion URLs</h3>
+    </div>
+    <span class="text-mono text-low" style="font-size:11px;">{{ urls|length if urls else 0 }} ROWS · ALL OVER TOR</span>
+  </div>
+  <div class="card-body" style="padding: 0;">
+    {% if urls and urls|length > 0 %}
+      <table class="table">
+        <thead>
           <tr>
-            <td><a href="{{ url }}" target="_blank" style="color: #0f0;">{{ url }}</a></td>
-            <td>
-              <form action="/enumerate/render" method="POST"><input id="onion_url" name="onion_url" value="http://{{url}}" type="hidden"><button>Extract DOM</button></form>&nbsp;&nbsp;&nbsp;
-              <button onclick="copyLink('{{ url }}')">Copy Link</button>
-            </td>
+            <th style="width:48px;">#</th>
+            <th>Hidden service</th>
+            <th style="text-align:right;">Action</th>
           </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-
-    <script>
-      function copyLink(url) {
-        // Create a temporary input element to hold the link text
-        const copyInput = document.createElement('input');
-        copyInput.style.position = 'absolute';
-        copyInput.style.left = '-9999px';
-        document.body.appendChild(copyInput);
-
-        // Set the input value to the link URL
-        copyInput.value = url;
-
-        // Select the input text
-        copyInput.select();
-
-        // Copy the selected text to the clipboard
-        document.execCommand('copy');
-
-        // Remove the temporary input element
-        document.body.removeChild(copyInput);
-      }
-    </script>
-  </main>
-</body>
-</html>
+        </thead>
+        <tbody>
+          {% for url in urls %}
+            <tr>
+              <td class="row-num">{{ loop.index }}</td>
+              <td>
+                <div class="row gap-2">
+                  <span class="status-dot" aria-hidden="true"></span>
+                  <a class="text-mono text-hi truncate" href="{{ url }}" target="_blank" rel="noopener noreferrer" style="max-width: 60ch;">{{ url }}</a>
+                </div>
+              </td>
+              <td class="actions">
+                <form action="/enumerate/render" method="POST" style="display:inline;">
+                  <input type="hidden" id="onion_url" name="onion_url" value="http://{{ url }}">
+                  <button class="btn btn--sm" type="submit">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                    Extract DOM
+                  </button>
+                </form>
+                <button class="btn btn--ghost btn--sm" data-copy="{{ url }}">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  Copy
+                </button>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <div class="empty">
+        <div class="empty-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></div>
+        <h3>No collection yet</h3>
+        <p>Issue a keyword and recursion depth above to begin a discovery operation. Results are listed here as they surface.</p>
+      </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

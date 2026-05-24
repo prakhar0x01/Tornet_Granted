@@ -1,210 +1,147 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Validate Onion URLs</title>
-  <style>
-    /* Dark theme styles */
-    body {
-      background-color: #17191c;
-      color: #adb5bd;
-      text-align: center;
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
+{% extends "base.html" %}
+{% block title %}Validate · TORNET GRANTED{% endblock %}
+{% block crumb %}Validate{% endblock %}
 
-    main {
-      padding: 20px;
-    }
+{% block content %}
+<header class="page-head">
+  <div>
+    <div class="crumbs"><span>Console</span><span>/</span><span>Reconnaissance</span><span>/</span><span>Validate</span></div>
+    <h1>Validate Hidden Services</h1>
+    <p class="lede">Probe single or bulk lists of onion endpoints over Tor SOCKS5. Capture liveness, response code, and server banners. Segment active vs. dead pools for downstream operations.</p>
+  </div>
+  <div class="actions"><span class="pill pill--ok"><span class="dot"></span>MODULE 02 · LIVE-PROBE</span></div>
+</header>
 
-    .column {
-      flex: 1;
-      margin: 0 10px;
-    }
+{% if success %}<div class="card mt-4" style="border-color: rgba(33,208,122,0.32); background: var(--ok-soft);"><div class="card-body" style="padding:var(--s-4) var(--s-5);"><span class="text-up" style="color:var(--ok); font-size:11px; font-family:var(--font-mono);">OK</span><p class="text-hi mt-2" style="margin:0;">{{ success }}</p></div></div>{% endif %}
+{% if error   %}<div class="card mt-4" style="border-color: rgba(255,59,92,0.32); background: var(--threat-soft);"><div class="card-body" style="padding:var(--s-4) var(--s-5);"><span class="text-up" style="color:var(--threat); font-size:11px; font-family:var(--font-mono);">ERROR</span><p class="text-hi mt-2" style="margin:0;">{{ error }}</p></div></div>{% endif %}
+{% if message %}<div class="card mt-4" style="border-color: rgba(106,166,255,0.32); background: var(--info-soft);"><div class="card-body" style="padding:var(--s-4) var(--s-5);"><span class="text-up" style="color:var(--info); font-size:11px; font-family:var(--font-mono);">NOTICE</span><p class="text-hi mt-2" style="margin:0;">{{ message }}</p></div></div>{% endif %}
 
-    section {
-      background-color: #26292c;
-      border-radius: 5px;
-      padding: 20px;
-      margin-bottom: 20px;
-    }
-
-    h2 {
-      color: #dfecf0;
-      margin-bottom: 10px;
-    }
-
-    label {
-      color: #adb5bd;
-    }
-
-    input[type="file"], input[type="text"], select {
-      margin: 5px 0;
-      padding: 8px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-      width: 100%;
-      box-sizing: border-box;
-    }
-
-    input[type="submit"], button {
-      padding: 8px 20px;
-      border: none;
-      border-radius: 5px;
-      background-color: #BB86FC;
-      color: black;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-
-    input[type="submit"]:hover, button:hover {
-      background-color: #404244;
-    }
-
-    .messages p {
-      margin: 10px 0;
-    }
-
-    .messages p.success {
-      color: #4db53c;
-    }
-
-    .messages p.error {
-      color: #e63946;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-
-    th, td {
-      border: 1px solid #26292c;
-      padding: 8px;
-    }
-
-    th {
-      background-color: #333;
-      color: #dfecf0;
-    }
-
-    tr:nth-child(even) {
-      background-color: #26292c;
-    }
-
-    .btn {
-      margin: 10px;
-      padding: 8px 20px;
-      border: none;
-      border-radius: 5px;
-      background-color: #26292c;
-      color: #adb5bd;
-      text-decoration: none;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-
-    .btn:hover {
-      background-color: #404244;
-    }
-
-    .text-success {
-      color: #4db53c;
-    }
-
-    .text-danger {
-      color: #e63946;
-    }
-  </style>
-</head>
-<body>
-    <main>
-        <h1>Validate Onion URLs</h1><hr><br>
-        <div style="display: flex; justify-content: space-around;">
-            <div class="column">
-                <section class="file-upload">
-                    <h2>Upload .txt file containing URLs</h2>
-                    <form action="/validate_file" method="POST" enctype="multipart/form-data">
-                        <label for="file">Select file:</label>
-                        <input type="file" name="file" id="file" accept=".txt">
-                        <br><br>
-                        <input type="submit" value="Upload">
-                    </form>
-                </section>
-                
-                    <p class="success">{{ success }}</p>
-                    <p class="error">{{ error }}</p>
-                
-            </div>
-            <div class="column">
-                <section class="single-url-validation">
-                    <h2>Validate Single Onion URL</h2>
-                    <form action="/enumerate/validate" method="POST">
-                        <label for="url">Enter Onion URL:</label>
-                        <input type="text" name="url" id="url" placeholder="somethingrandom.onion"><br><br>
-                        <button type="submit">Decode</button>
-                    </form>
-                    <br>
-                    {% if url %}
-                        <h3>Results for ->&nbsp;
-                            <code style="color: #52c41a; font-size: 20px;">{{ url }}</code>
-                        </h3>
-                        {% if headers %}
-                            <pre class="code">
-                                {% for key, value in headers.items() %}
-                                    {{ key }}<br><br> {{ value }}
-                                {% endfor %}
-                            </pre>
-                        {% else %}
-                            <p class="error">Error retrieving headers for {{ url }}</p>
-                        {% endif %}
-                    {% endif %}
-                </section>
-            </div>
-            <div class="column">
-                <section class="validation-results">
-                    <h2>Bulk Validation Results</h2>
-                    <div class="row mb-3">
-                        <div class="col-sm-6">
-                            <p>Active URLs: {{ active_urls }}</p>
-                        </div>
-                        <div class="col-sm-6">
-                            <p>Dead URLs: {{ dead_urls }}</p>
-                        </div>
-                    </div>
-                    <form action="/enumerate/validate" method="POST">
-                        <label for="export_format">Export Format:</label>
-                        <select id="export_format" name="export_format">
-                            <option value="txt">TXT</option>
-                            <option value="json">JSON</option>
-                            <option value="pdf">PDF</option>
-                        </select><br><br>
-                        <input type="submit" value="Export">
-                    </form>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>URL</th>
-                                <th>Status</th>
-                                <!--<th>Response</th>-->
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for url in results %}
-                                <tr>
-                                    <td>{{ url["url"] }}</td>
-                                    <td {% if url["status"] == "Active" %}class="text-success"{% elif url["status"] == "Dead" %}class="text-danger"{% endif %}><b>{{ url["status"] }}</b></td>
-                                    <!--<td>{{ url["response"] }}</td>-->
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </section>
-            </div>
+<section class="grid-2 mt-4">
+  <!-- ── Single URL probe ── -->
+  <div class="card">
+    <div class="card-head">
+      <div><span class="eyebrow">Single Target</span><h3 style="margin-top:8px;">Probe one endpoint</h3></div>
+    </div>
+    <div class="card-body">
+      <form action="/enumerate/validate" method="POST" class="col gap-4">
+        <div class="field">
+          <label class="field-label" for="url">Onion URL</label>
+          <div class="input-wrap">
+            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3v18"/></svg>
+            <input class="input input--mono" type="text" id="url" name="url" placeholder="somethingrandom.onion">
+          </div>
+          <span class="field-hint">Provide a bare onion address or a fully-qualified <code class="code--inline">http://…</code> URL.</span>
         </div>
-    </main>
-</body>
-</html>
+        <button class="btn btn--primary" type="submit">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
+          Probe Target
+        </button>
+      </form>
+
+      {% if url %}
+        <div class="div-label">Response · {{ url }}</div>
+        {% if headers %}
+          <div class="row mb-2">
+            <span class="pill pill--ok"><span class="dot"></span>LIVE</span>
+            <span class="text-mono text-low" style="font-size:11px;">{{ headers|length }} header fields captured</span>
+          </div>
+          <div class="code">{% for key, value in headers.items() %}<span style="color:var(--accent);">{{ key }}</span>: {{ value }}
+{% endfor %}</div>
+        {% else %}
+          <div class="row gap-2"><span class="pill pill--threat"><span class="dot"></span>DEAD / UNREACHABLE</span></div>
+          <p class="text-mid mt-3" style="font-size:13px;">No response received from <code class="code--inline">{{ url }}</code> over the Tor circuit.</p>
+        {% endif %}
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- ── Bulk upload ── -->
+  <div class="card">
+    <div class="card-head">
+      <div><span class="eyebrow">Bulk Operation</span><h3 style="margin-top:8px;">Upload target list</h3></div>
+      <span class="pill pill--accent"><span class="dot"></span>.TXT</span>
+    </div>
+    <div class="card-body">
+      <form action="/validate_file" method="POST" enctype="multipart/form-data" class="col gap-4">
+        <label class="dropzone">
+          <span class="dz-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          </span>
+          <strong>Drop a target list</strong> or <span style="color:var(--accent);">click to browse</span>
+          <div class="text-low mt-2" style="font-size:12px;">One onion URL per line · UTF-8 · .txt</div>
+          <div class="text-hi text-mono mt-3 dz-filename" style="font-size:12px;">— no file selected —</div>
+          <input type="file" name="file" id="file" accept=".txt">
+        </label>
+        <button class="btn btn--primary" type="submit">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+          Begin Bulk Probe
+        </button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ── Bulk results table ── -->
+<section class="card mt-6">
+  <div class="card-head">
+    <div><span class="eyebrow">Probe Results</span><h3 style="margin-top:8px;">Bulk validation report</h3></div>
+    <form action="/enumerate/validate" method="POST" class="row gap-2">
+      <select class="select" name="export_format" style="height:32px; padding:0 var(--s-3); width:auto;">
+        <option value="txt">TXT</option><option value="json">JSON</option><option value="pdf">PDF</option>
+      </select>
+      <button type="submit" class="btn btn--ghost btn--sm">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Export
+      </button>
+    </form>
+  </div>
+
+  <div class="card-body" style="padding: var(--s-5) var(--s-6); border-bottom: 1px solid var(--border-soft);">
+    <div class="kpi-strip" style="grid-template-columns: repeat(3, 1fr);">
+      <div class="kpi kpi--ok">
+        <div class="kpi-label">Active</div>
+        <div class="kpi-value">{{ active_urls or 0 }}</div>
+      </div>
+      <div class="kpi kpi--threat">
+        <div class="kpi-label">Dead</div>
+        <div class="kpi-value">{{ dead_urls or 0 }}</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Total Probed</div>
+        <div class="kpi-value">{{ results|length if results else 0 }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding: 0;">
+    {% if results and results|length > 0 %}
+      <table class="table">
+        <thead><tr><th style="width:48px;">#</th><th>Endpoint</th><th style="width:140px;">Status</th></tr></thead>
+        <tbody>
+          {% for url in results %}
+            <tr>
+              <td class="row-num">{{ loop.index }}</td>
+              <td class="mono text-hi truncate" style="max-width:60ch;">{{ url["url"] }}</td>
+              <td>
+                {% if url["status"] == "Active" %}
+                  <span class="pill pill--ok"><span class="dot"></span>ACTIVE</span>
+                {% elif url["status"] == "Dead" %}
+                  <span class="pill pill--threat"><span class="dot"></span>DEAD</span>
+                {% else %}
+                  <span class="pill"><span class="dot"></span>{{ url["status"] }}</span>
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <div class="empty">
+        <div class="empty-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <h3>No bulk results</h3>
+        <p>Upload a <code class="code--inline">.txt</code> list of onions to populate this report.</p>
+      </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

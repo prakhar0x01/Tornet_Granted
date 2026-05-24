@@ -1,58 +1,68 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Metadata Extractor</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        h1 {
-            text-align: center;
-        }
-        form {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        input[type="file"] {
-            margin: 10px 0;
-        }
-        button {
-            padding: 8px 16px;
-            border: none;
-            border-radius: 4px;
-            background-color: #007bff;
-            color: white;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        pre {
-            background-color: #f5f5f5;
-            padding: 10px;
-            border-radius: 5px;
-            max-width: 600px;
-            overflow-x: auto;
-        }
-    </style>
-</head>
-<body>
-    <h1>Image Metadata Extractor</h1>
-    <form action="/enumerate/metadata" method="POST" enctype="multipart/form-data">
-        <input type="file" name="file" accept="image/*" required>
-        <button type="submit">Upload Image</button>
-    </form>
-    {% if message %}
-        <p>{{ message }}</p>
-    {% endif %}
-    {% if metadata %}
-        <h2>Metadata:</h2>
-        <pre>{{ metadata }}</pre>
-    {% endif %}
-</body>
-</html>
+{% extends "base.html" %}
+{% block title %}EXIF Analysis · TORNET GRANTED{% endblock %}
+{% block crumb %}EXIF Analysis{% endblock %}
+
+{% block content %}
+<header class="page-head">
+  <div>
+    <div class="crumbs"><span>Console</span><span>/</span><span>Forensics</span><span>/</span><span>EXIF Analysis</span></div>
+    <h1>EXIF / Media Forensics</h1>
+    <p class="lede">Pull hidden metadata from images and media artefacts collected from dark-web chat rooms, forums, or marketplace listings. Surface GPS coordinates, device fingerprints, embedded comments and timestamps.</p>
+  </div>
+  <div class="actions"><span class="pill pill--threat"><span class="dot"></span>MODULE 05 · FORENSIC</span></div>
+</header>
+
+<section class="grid-2 mt-4" style="grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);">
+
+  <div class="card">
+    <div class="card-head">
+      <div><span class="eyebrow">Submit Artefact</span><h3 style="margin-top:8px;">Upload media for analysis</h3></div>
+    </div>
+    <div class="card-body">
+      <form action="/enumerate/metadata" method="POST" enctype="multipart/form-data" class="col gap-4">
+        <label class="dropzone">
+          <span class="dz-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+          </span>
+          <strong>Drop image artefact</strong> or <span style="color:var(--accent);">click to browse</span>
+          <div class="text-low mt-2" style="font-size:12px;">Supports JPG / PNG / WebP · routed through ExifTool</div>
+          <div class="text-hi text-mono mt-3 dz-filename" style="font-size:12px;">— no artefact selected —</div>
+          <input type="file" name="file" accept="image/*" required>
+        </label>
+        <button type="submit" class="btn btn--primary">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          Extract Metadata
+        </button>
+
+        {% if message %}
+        <div class="row gap-2 mt-3">
+          <span class="pill pill--info"><span class="dot"></span>NOTICE</span>
+          <span class="text-hi">{{ message }}</span>
+        </div>
+        {% endif %}
+      </form>
+    </div>
+    <div class="card-foot">
+      <span>All analysis happens locally · artefacts are not uploaded externally</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head">
+      <div><span class="eyebrow">Metadata Report</span><h3 style="margin-top:8px;">Extracted intelligence</h3></div>
+      {% if metadata %}<span class="pill pill--ok"><span class="dot"></span>EXTRACTED</span>{% endif %}
+    </div>
+    <div class="card-body" style="padding:0;">
+      {% if metadata %}
+        <pre class="code" style="margin:0; border:none; border-radius:0; max-height:70vh;">{{ metadata }}</pre>
+      {% else %}
+        <div class="empty">
+          <div class="empty-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg></div>
+          <h3>No artefact analysed</h3>
+          <p>Upload an image to surface its hidden metadata. Key fields of interest: <code class="code--inline">GPS</code>, <code class="code--inline">Make/Model</code>, <code class="code--inline">DateTimeOriginal</code>, <code class="code--inline">Software</code>, <code class="code--inline">UserComment</code>.</p>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,191 @@
+/* ============================================================
+   TORNET GRANTED — Design Tokens
+   Tactical intelligence theme. Matte black + deep navy + cyan
+   electric accents, amber warnings, threat red, signal green.
+   ============================================================ */
+
+:root {
+  /* --------- Surface scale (background → elevated) ---------- */
+  --surface-0: #07090d;     /* page background, void */
+  --surface-1: #0b1118;     /* default panel */
+  --surface-2: #111a25;     /* elevated panel */
+  --surface-3: #18222f;     /* hover / interactive */
+  --surface-4: #1f2b3a;     /* highest elevation */
+  --surface-glass: rgba(17, 26, 37, 0.62);
+  --surface-grid: rgba(64, 224, 255, 0.04);
+
+  /* --------- Border / divider ---------- */
+  --border-soft: rgba(255, 255, 255, 0.06);
+  --border: rgba(120, 160, 200, 0.14);
+  --border-strong: rgba(120, 160, 200, 0.28);
+  --border-accent: rgba(0, 229, 255, 0.42);
+
+  /* --------- Text scale ---------- */
+  --text-hi: #e6eef7;        /* primary heading */
+  --text: #b9c6d4;           /* body */
+  --text-mid: #8194a8;       /* secondary */
+  --text-low: #5b6b7e;       /* tertiary / hint */
+  --text-mute: #3e4a5b;      /* disabled */
+  --text-on-accent: #04111a; /* text on cyan buttons */
+
+  /* --------- Brand & accents ---------- */
+  --accent: #00e5ff;          /* primary cyber-cyan */
+  --accent-2: #6cf3ff;        /* hover */
+  --accent-dim: #00a5b8;      /* pressed */
+  --accent-glow: rgba(0, 229, 255, 0.32);
+  --brand: #00e5ff;
+  --brand-deep: #003a44;
+
+  /* --------- Signal palette ---------- */
+  --ok: #21d07a;
+  --ok-soft: rgba(33, 208, 122, 0.14);
+  --warn: #ffb020;
+  --warn-soft: rgba(255, 176, 32, 0.14);
+  --threat: #ff3b5c;
+  --threat-soft: rgba(255, 59, 92, 0.14);
+  --info: #6aa6ff;
+  --info-soft: rgba(106, 166, 255, 0.14);
+  --neutral-soft: rgba(255, 255, 255, 0.06);
+
+  /* --------- Severity (intel scoring) ---------- */
+  --sev-critical: #ff2a5b;
+  --sev-high:     #ff6a3d;
+  --sev-medium:   #ffb020;
+  --sev-low:      #6aa6ff;
+  --sev-info:     #8194a8;
+
+  /* --------- Typography ---------- */
+  --font-sans: "Inter", "Geist", "SF Pro Text", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", "IBM Plex Mono", "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --font-display: "Space Grotesk", "Inter", system-ui, sans-serif;
+
+  --fs-12: 12px;
+  --fs-13: 13px;
+  --fs-14: 14px;
+  --fs-15: 15px;
+  --fs-16: 16px;
+  --fs-18: 18px;
+  --fs-20: 20px;
+  --fs-24: 24px;
+  --fs-28: 28px;
+  --fs-32: 32px;
+  --fs-40: 40px;
+  --fs-56: 56px;
+  --fs-72: 72px;
+
+  --lh-tight: 1.15;
+  --lh-snug:  1.35;
+  --lh-base:  1.55;
+
+  --tracking-tight: -0.02em;
+  --tracking-wide:   0.12em;
+  --tracking-mega:   0.22em;
+
+  /* --------- Spacing (4px scale) ---------- */
+  --s-1:  4px;
+  --s-2:  8px;
+  --s-3:  12px;
+  --s-4:  16px;
+  --s-5:  20px;
+  --s-6:  24px;
+  --s-7:  32px;
+  --s-8:  40px;
+  --s-9:  56px;
+  --s-10: 72px;
+  --s-11: 96px;
+
+  /* --------- Radius ---------- */
+  --r-2: 4px;
+  --r-3: 6px;
+  --r-4: 10px;
+  --r-5: 14px;
+  --r-6: 20px;
+  --r-pill: 999px;
+
+  /* --------- Elevation ---------- */
+  --shadow-1: 0 1px 0 rgba(255, 255, 255, 0.03) inset, 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-2: 0 6px 18px rgba(0, 0, 0, 0.45), 0 1px 0 rgba(255, 255, 255, 0.04) inset;
+  --shadow-3: 0 18px 48px rgba(0, 0, 0, 0.55), 0 1px 0 rgba(255, 255, 255, 0.05) inset;
+  --shadow-accent: 0 0 0 1px var(--border-accent), 0 0 28px var(--accent-glow);
+
+  /* --------- Motion ---------- */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in:  cubic-bezier(0.6, 0, 0.85, 0.3);
+  --dur-1: 120ms;
+  --dur-2: 200ms;
+  --dur-3: 320ms;
+  --dur-4: 600ms;
+
+  /* --------- Layout ---------- */
+  --sidebar-w: 248px;
+  --sidebar-w-collapsed: 64px;
+  --topbar-h: 56px;
+  --container-max: 1440px;
+
+  /* --------- Z-index ---------- */
+  --z-sidebar: 40;
+  --z-topbar: 50;
+  --z-modal: 80;
+  --z-toast: 90;
+}
+
+/* ----------- Base reset + body ----------- */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--surface-0);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: var(--fs-14);
+  line-height: var(--lh-base);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  min-height: 100vh;
+  /* faint tactical grid + radial vignette */
+  background-image:
+    radial-gradient(1200px 720px at 70% -10%, rgba(0, 229, 255, 0.08), transparent 60%),
+    radial-gradient(900px 600px at -10% 110%, rgba(106, 166, 255, 0.06), transparent 60%),
+    linear-gradient(var(--surface-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--surface-grid) 1px, transparent 1px),
+    linear-gradient(180deg, var(--surface-0), #05080c);
+  background-size: auto, auto, 32px 32px, 32px 32px, auto;
+  background-attachment: fixed;
+}
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { color: var(--accent-2); }
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-hi);
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: var(--tracking-tight);
+  margin: 0;
+  line-height: var(--lh-tight);
+}
+
+code, pre, kbd, samp {
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+}
+
+::selection {
+  background: rgba(0, 229, 255, 0.32);
+  color: var(--text-hi);
+}
+
+/* Scrollbar — minimal tactical */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: rgba(120, 160, 200, 0.14);
+  border-radius: var(--r-pill);
+}
+::-webkit-scrollbar-thumb:hover { background: rgba(120, 160, 200, 0.28); }

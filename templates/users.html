@@ -1,129 +1,124 @@
-:{% block content %}
-<style>
+{% extends "base.html" %}
+{% block title %}Operators · TORNET GRANTED{% endblock %}
+{% block crumb %}Operators{% endblock %}
 
-  header {
-  background-color: #333; /* Dark background */
-  color: #fff; /* Light text color */
-  padding: 20px; /* Padding for spacing */
-  display: flex; /* Arrange elements horizontally */
-  justify-content: space-between; /* Space elements evenly */
-  align-items: center; /* Align horizontally in the middle */
-}
-
-h1 {
-  margin: 0; /* Remove default top margin */
-}
-
-nav {
-  display: flex; /* Arrange links horizontally */
-  list-style: none; /* Remove default bullet points */
-  padding: 0; /* Remove default padding */
-  margin: 0; /* Remove default margin */
-}
-
-nav a {
-  color: inherit; /* Inherit text color from header */
-  text-decoration: none; /* Remove underline */
-  margin-right: 20px; /* Spacing between links */
-  font-weight: bold; /* Make links stand out */
-}
-
-nav a:hover {
-  color: #ddd; /* Change text color on hover */
-}
-
-  /* Dark theme styles */
-  body {
-    background-color: #222;
-    color: #ddd;
-    font-family: sans-serif;
-  }
-
-  .admin-table {
-    border-collapse: collapse;
-    width: 100%;
-    margin: 20px auto;
-    text-align:center;
-  }
-
-  .admin-table th,
-  .admin-table td {
-    padding: 9px;
-    border: 1px solid #444;
-    text-align: center;
-  }
-
-  .admin-table th {
-    background-color: #333;
-    color: #fff;
-  }
-
-  .admin-buttons {
-    text-align: center;
-    margin-top: 20px;
-    color:#300;
-  }
-
-  .admin-buttons a {
-    margin: 0 10px;
-  }
-
-  .admin-buttons button {
-    background-color: #BB86FC;
-    color: black;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-
-.bin-button {
-  padding: 7px 15px;
-  background-color: #BB86FC;  
-  font-size: 30px;
-  color:black;
-}
-
-  .admin-buttons button:hover {
-    background-color: #444;
-  }
-</style>
-<header>
-  <h1>Update Users Password</h1>
-  <nav>
-    <a href="/dashboard">Home</a>
-    <a href="/add_user">Add User</a>
-    <a href="/update_password">Update Password</a>
-  </nav>
+{% block content %}
+<header class="page-head">
+  <div>
+    <div class="crumbs"><span>Console</span><span>/</span><span>Administration</span><span>/</span><span>Operators</span></div>
+    <h1>Operator Roster</h1>
+    <p class="lede">Provisioned analysts and directors with access to the TORNET console. Manage API credentials, rotate passwords, decommission accounts.</p>
+  </div>
+  <div class="actions">
+    <a href="/update_password" class="btn btn--ghost">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      Rotate Credential
+    </a>
+    <a href="/add_user" class="btn btn--primary">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+      Provision Operator
+    </a>
+  </div>
 </header>
-<div class="admin-table">
-  <table>
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>USERNAME</th>
-        <th>PASSWORD (SHA-256)</th>
-        <th>API_KEY</th>
-        <th>SECRET_ACCESS_KEY</th>
-        <th>Delete</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for user in users %}
-        <tr>
-          <td>{{ user.id }}</td>
-          <td>{{ user.username }}</td>
-          <td>{{ user.password }}</td>
-          <td>{{ user.api_key }}</td>
-          <td>{{ user.secret_access_key }}</td>
-          <td>
-            <form action="{{ url_for('delete_user', user_id=user.id) }}" method="post">
-              <button type="submit" class="bin-button"><b>&#128465;</b></button>
-            </form>
-          </td>
-        </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+
+{% if error %}
+<div class="card mt-4" style="border-color: rgba(255,59,92,0.32); background: var(--threat-soft);">
+  <div class="card-body" style="padding:var(--s-4) var(--s-5);">
+    <span class="text-up" style="color:var(--threat); font-size:11px; font-family:var(--font-mono);">ERROR</span>
+    <p class="text-hi mt-2" style="margin:0;">{{ error }}</p>
+  </div>
 </div>
+{% endif %}
+
+<section class="kpi-strip mt-4">
+  <div class="kpi kpi--accent">
+    <div class="kpi-label">Active Operators</div>
+    <div class="kpi-value">{{ users|length }}</div>
+    <div class="kpi-meta"><span>Console access provisioned</span></div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-label">Directors</div>
+    <div class="kpi-value">{% set dcount = users|selectattr('username','equalto','admin')|list|length %}{{ dcount }}</div>
+    <div class="kpi-meta"><span>Privileged tier</span></div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-label">Analysts</div>
+    <div class="kpi-value">{{ users|length - dcount }}</div>
+    <div class="kpi-meta"><span>Tier-2 access</span></div>
+  </div>
+  <div class="kpi kpi--warn">
+    <div class="kpi-label">Hash Algorithm</div>
+    <div class="kpi-value" style="font-size: var(--fs-20); letter-spacing: 0.1em;">SHA-256</div>
+    <div class="kpi-meta"><span>Credentials at rest</span></div>
+  </div>
+</section>
+
+<section class="card mt-6">
+  <div class="card-head">
+    <div><span class="eyebrow">Roster</span><h3 style="margin-top:8px;">Provisioned operators</h3></div>
+    <span class="text-mono text-low" style="font-size:11px;">{{ users|length }} ROWS</span>
+  </div>
+  <div class="card-body" style="padding:0;">
+    <table class="table">
+      <thead>
+        <tr>
+          <th style="width:48px;">#</th>
+          <th>Operator</th>
+          <th>Role</th>
+          <th>Credential digest</th>
+          <th>API Key</th>
+          <th style="width:140px; text-align:right;">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for user in users %}
+          <tr>
+            <td class="row-num">{{ user.id }}</td>
+            <td>
+              <div class="row gap-3">
+                <span style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#003a44,#001016);border:1px solid var(--border-accent);color:var(--accent);display:grid;place-items:center;font:700 11px/1 var(--font-mono);">{{ user.username[:2]|upper }}</span>
+                <div>
+                  <div class="text-hi" style="font-weight:600;">{{ user.username }}</div>
+                  <div class="text-low text-mono" style="font-size:11px;">OPID-{{ '%04d' % user.id }}</div>
+                </div>
+              </div>
+            </td>
+            <td>
+              {% if user.username == 'admin' %}
+                <span class="pill pill--accent"><span class="dot"></span>DIRECTOR</span>
+              {% else %}
+                <span class="pill pill--info"><span class="dot"></span>ANALYST</span>
+              {% endif %}
+            </td>
+            <td class="mono text-mid truncate" style="max-width:22ch;">{{ user.password }}</td>
+            <td>
+              <div class="row gap-2">
+                <code class="code--inline truncate" style="max-width:18ch;">{{ user.api_key }}</code>
+                <button class="btn btn--ghost btn--sm" data-copy="{{ user.api_key }}" title="Copy API key">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                </button>
+              </div>
+            </td>
+            <td class="actions">
+              <button class="btn btn--ghost btn--sm" data-copy="{{ user.secret_access_key }}" title="Copy secret access key">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                Secret
+              </button>
+              <form action="{{ url_for('delete_user', user_id=user.id) }}" method="post" onsubmit="return confirm('Decommission operator {{ user.username }}? This action is irreversible.');" style="display:inline;">
+                <button type="submit" class="btn btn--danger btn--sm">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+                  Revoke
+                </button>
+              </form>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div class="card-foot">
+    <span>All credential digests stored as SHA-256 · API keys are stateless</span>
+    <span class="text-mono text-low" style="font-size:11px;">ROSTER · DIRECTOR-ONLY</span>
+  </div>
+</section>
 {% endblock %}

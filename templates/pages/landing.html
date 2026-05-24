@@ -1,0 +1,335 @@
+{% extends "base.html" %}
+{% block title %}TORNET GRANTED — Dark Web Intelligence Platform{% endblock %}
+
+{% block layout %}
+<div class="full">
+  <!-- ─────── Top nav ─────── -->
+  <nav class="lp-nav" aria-label="Marketing navigation">
+    {% include "partials/_brand.html" %}
+    <div class="links">
+      <a href="#capabilities">Capabilities</a>
+      <a href="#workflow">Workflow</a>
+      <a href="#usecases">Use Cases</a>
+      <a href="#ethics">Ethics</a>
+      <a href="/login" class="btn btn--ghost btn--sm">
+        Operator Sign-In
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </a>
+    </div>
+  </nav>
+
+  <!-- ─────── Hero ─────── -->
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero-grid">
+      <div>
+        <span class="eyebrow">Cyber Threat Intelligence · Onion Reconnaissance</span>
+
+        <h1 id="hero-title">
+          Illuminate the <span class="glow">unindexed web.</span>
+          <br/>Hunt threats at the source.
+        </h1>
+
+        <p class="sub">
+          <strong style="color:var(--text-hi);">TORNET GRANTED</strong> is an
+          intelligence-grade reconnaissance platform that discovers, validates,
+          renders and enumerates Tor hidden services — turning the noise of the
+          dark web into structured, attributable signal for analysts,
+          investigators, and defenders.
+        </p>
+
+        <div class="cta-row">
+          <a class="btn btn--primary btn--lg" href="/login">
+            Launch Console
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+          <a class="btn btn--ghost btn--lg" href="#workflow">See How It Works</a>
+        </div>
+
+        <div class="hero-meta">
+          <div class="hm">
+            <span class="v"><span data-count="1284000">0</span>+</span>
+            <span class="k">.onion endpoints catalogued</span>
+          </div>
+          <div class="hm">
+            <span class="v"><span data-count="98.2" data-count-dec="1">0</span>%</span>
+            <span class="k">Validation accuracy</span>
+          </div>
+          <div class="hm">
+            <span class="v"><span data-count="6">0</span></span>
+            <span class="k">Intelligence modules</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-canvas-wrap" aria-hidden="true">
+        <svg id="onion-net" role="presentation"></svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────── Capabilities ─────── -->
+  <section class="section" id="capabilities">
+    <header class="section-head">
+      <span class="eyebrow">Capabilities</span>
+      <h2>A unified console for hidden-service intelligence.</h2>
+      <p>
+        Six tightly-integrated modules covering the full reconnaissance loop —
+        from discovery to deanonymization signals — built around a single
+        Tor-aware analyst workflow.
+      </p>
+    </header>
+
+    <div class="cap-grid">
+      <article class="mod">
+        <header class="mod-head">
+          <div class="mod-ico">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          </div>
+          <div>
+            <div class="mod-sub">Module 01</div>
+            <div class="mod-title">Discover Onion URLs</div>
+          </div>
+        </header>
+        <p class="mod-body">Multi-engine recursive scraping across dark-web indexers. Tune depth, filter by keyword, export findings as TXT/JSON/PDF.</p>
+        <div class="mod-foot">
+          <span class="pill pill--accent"><span class="dot"></span>RECURSIVE</span>
+          <span class="mod-cta">Recon mode →</span>
+        </div>
+      </article>
+
+      <article class="mod">
+        <header class="mod-head">
+          <div class="mod-ico">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <div>
+            <div class="mod-sub">Module 02</div>
+            <div class="mod-title">Validate Hidden Services</div>
+          </div>
+        </header>
+        <p class="mod-body">Single-shot or bulk uploads. Liveness probes through SOCKS5 over Tor with response headers, status, and dead-pool segmentation.</p>
+        <div class="mod-foot">
+          <span class="pill pill--ok"><span class="dot"></span>LIVE-PROBE</span>
+          <span class="mod-cta">Probe targets →</span>
+        </div>
+      </article>
+
+      <article class="mod">
+        <header class="mod-head">
+          <div class="mod-ico">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          </div>
+          <div>
+            <div class="mod-sub">Module 03</div>
+            <div class="mod-title">DOM Extraction</div>
+          </div>
+        </header>
+        <p class="mod-body">Render the document model of any hidden service. Inspect raw markup, asset references, and embedded artefacts with syntax highlighting.</p>
+        <div class="mod-foot">
+          <span class="pill pill--info"><span class="dot"></span>STATIC</span>
+          <span class="mod-cta">Extract source →</span>
+        </div>
+      </article>
+
+      <article class="mod">
+        <header class="mod-head">
+          <div class="mod-ico">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+          </div>
+          <div>
+            <div class="mod-sub">Module 04</div>
+            <div class="mod-title">Enumerate &amp; Fingerprint</div>
+          </div>
+        </header>
+        <p class="mod-body">Regex-driven leak detection: usernames, passwords, crypto wallets, email vectors, domain references, server configuration files via fuzzing.</p>
+        <div class="mod-foot">
+          <span class="pill pill--warn"><span class="dot"></span>LEAK-HUNT</span>
+          <span class="mod-cta">Score targets →</span>
+        </div>
+      </article>
+
+      <article class="mod">
+        <header class="mod-head">
+          <div class="mod-ico">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+          </div>
+          <div>
+            <div class="mod-sub">Module 05</div>
+            <div class="mod-title">EXIF / Media Forensics</div>
+          </div>
+        </header>
+        <p class="mod-body">Surface hidden metadata in images and media seized from dark-web chat rooms — GPS, device fingerprints, timestamps, embedded comments.</p>
+        <div class="mod-foot">
+          <span class="pill pill--threat"><span class="dot"></span>FORENSIC</span>
+          <span class="mod-cta">Analyse media →</span>
+        </div>
+      </article>
+
+      <article class="mod">
+        <header class="mod-head">
+          <div class="mod-ico">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+          </div>
+          <div>
+            <div class="mod-sub">Module 06</div>
+            <div class="mod-title">Mission Scheduler</div>
+          </div>
+        </header>
+        <p class="mod-body">Cron-style scheduling for recurring reconnaissance. Off-peak harvesting, automatic delivery of intelligence digests to operator inboxes.</p>
+        <div class="mod-foot">
+          <span class="pill pill--accent"><span class="dot"></span>AUTOMATED</span>
+          <span class="mod-cta">Plan mission →</span>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ─────── Workflow ─────── -->
+  <section class="section" id="workflow">
+    <header class="section-head">
+      <span class="eyebrow">Analyst Workflow</span>
+      <h2>From cold lead to attributable intelligence.</h2>
+      <p>The platform mirrors the way real analysts work — a linear collection-to-reporting pipeline, with every artefact traceable back to its operator and timestamp.</p>
+    </header>
+
+    <div class="workflow">
+      <div class="step"><div class="n">01 · COLLECT</div><div class="t">Discover</div><div class="d">Recursive search of dark-web indexers for keyword-relevant onions.</div></div>
+      <div class="step"><div class="n">02 · TRIAGE</div><div class="t">Validate</div><div class="d">Liveness, response codes, server banners through Tor SOCKS5.</div></div>
+      <div class="step"><div class="n">03 · INSPECT</div><div class="t">Render &amp; Extract</div><div class="d">Pull DOM, scrape outbound links and embedded assets.</div></div>
+      <div class="step"><div class="n">04 · ENRICH</div><div class="t">Enumerate</div><div class="d">Regex leak-hunt + fuzzing for misconfigurations and credentials.</div></div>
+      <div class="step"><div class="n">05 · REPORT</div><div class="t">Schedule &amp; Export</div><div class="d">Automated email digests in TXT, JSON or PDF for downstream tooling.</div></div>
+    </div>
+  </section>
+
+  <!-- ─────── Use cases ─────── -->
+  <section class="section" id="usecases">
+    <header class="section-head">
+      <span class="eyebrow">Operational Use Cases</span>
+      <h2>Built for the people who watch the dark.</h2>
+    </header>
+
+    <div class="usecases">
+      <div class="usecase">
+        <div class="tag">Threat Intelligence</div>
+        <h4>Underground market monitoring</h4>
+        <p>Track emergence of new marketplaces, leak forums, and ransomware blogs. Establish persistent collection on threat actor infrastructure.</p>
+      </div>
+      <div class="usecase">
+        <div class="tag">Digital Forensics</div>
+        <h4>OPSEC failure analysis</h4>
+        <p>Identify operators exposed through metadata, server misconfigurations, leaked .git directories, or unredacted EXIF in posted imagery.</p>
+      </div>
+      <div class="usecase">
+        <div class="tag">Brand Protection</div>
+        <h4>Stolen-asset reconnaissance</h4>
+        <p>Detect brand impersonation, leaked customer data, and unauthorized resale of corporate intellectual property on hidden services.</p>
+      </div>
+      <div class="usecase">
+        <div class="tag">CSIRT / Blue Team</div>
+        <h4>Pre-breach early warning</h4>
+        <p>Pivot from observed indicators (Bitcoin addresses, contact emails, PGP keys) to attribute infrastructure across the hidden web.</p>
+      </div>
+      <div class="usecase">
+        <div class="tag">Academic Research</div>
+        <h4>Onion ecosystem studies</h4>
+        <p>Longitudinal datasets of hidden service availability, content categorisation, and topological structure of the v3 onion graph.</p>
+      </div>
+      <div class="usecase">
+        <div class="tag">Law Enforcement</div>
+        <h4>Authorised investigative support</h4>
+        <p>Structured evidence collection workflows with operator-attributable audit trails for use by accredited investigative units.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────── Architecture / stack callout ─────── -->
+  <section class="section">
+    <div class="card card--glass">
+      <div class="card-head">
+        <div>
+          <span class="eyebrow">Engineered for Operators</span>
+          <h3 style="margin-top:8px;">Self-hosted. Air-gappable. Operator-attributable.</h3>
+        </div>
+        <span class="pill pill--accent"><span class="dot"></span>OPEN SOURCE</span>
+      </div>
+      <div class="card-body">
+        <div class="grid-3">
+          <div>
+            <div class="text-up text-low" style="font-size:11px;">Routing</div>
+            <div class="text-hi text-mono mt-2">Tor Daemon · SOCKS5 9050</div>
+            <p class="text-mid mt-2" style="font-size:13px;">All outbound HTTP traffic egresses through the local Tor daemon. No clearnet leakage from collection workers.</p>
+          </div>
+          <div>
+            <div class="text-up text-low" style="font-size:11px;">Runtime</div>
+            <div class="text-hi text-mono mt-2">Python 3 · Flask · SQLite</div>
+            <p class="text-mid mt-2" style="font-size:13px;">Minimal infrastructure footprint. Drops into a single host. Background scheduler powered by APScheduler.</p>
+          </div>
+          <div>
+            <div class="text-up text-low" style="font-size:11px;">Forensics</div>
+            <div class="text-hi text-mono mt-2">ExifTool · BeautifulSoup · ReportLab</div>
+            <p class="text-mid mt-2" style="font-size:13px;">Industry-grade metadata extraction and DOM parsing. PDF intelligence reports for offline distribution.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────── Ethics ─────── -->
+  <section class="section" id="ethics">
+    <div class="card" style="padding: var(--s-7);">
+      <div class="row" style="align-items:flex-start; gap: var(--s-5);">
+        <div class="mod-ico" style="width:48px;height:48px;flex:0 0 48px;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div>
+          <span class="eyebrow">Ethical Use Policy</span>
+          <h3 class="mt-2">Defence-first. Research-driven. Strictly authorised use only.</h3>
+          <p class="text-mid mt-3" style="max-width: 78ch;">
+            TORNET GRANTED is built and distributed for <strong>defensive cyber-security research,
+            authorised threat intelligence, academic study, and law-enforcement use</strong> in jurisdictions
+            where such activity is lawful. Operators are responsible for ensuring all collection complies
+            with local legislation and organisational policy. The platform is not designed to facilitate
+            illegal access, harassment, or extraction of regulated data.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────── CTA ─────── -->
+  <section class="cta-band">
+    <span class="eyebrow">Ready when you are</span>
+    <h2 class="mt-3">Step inside the console.</h2>
+    <p>Default credentials ship with the platform for the inaugural admin operator. Provision additional analysts from the Administration panel.</p>
+    <div class="cta-row" style="justify-content:center; margin-top: var(--s-6);">
+      <a class="btn btn--primary btn--lg" href="/login">Operator Sign-In</a>
+      <a class="btn btn--ghost btn--lg" href="https://github.com/prakhar0x01/Tornet_Granted" target="_blank" rel="noopener">
+        View on GitHub
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- ─────── Footer ─────── -->
+  <footer class="lp-foot">
+    <div class="disclaimer">
+      © {{ now or 2025 }} TORNET GRANTED · An open-source dark-web intelligence
+      research platform. The Tor logo and onion routing trademarks belong to The
+      Tor Project. Use of this software in jurisdictions where reconnaissance of
+      hidden services is restricted is the sole responsibility of the operator.
+    </div>
+    <div class="text-mono text-low" style="font-size:11px;">
+      v2.0 · TACTICAL EDITION
+    </div>
+  </footer>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  // Render the onion-network visualization in the hero
+  document.addEventListener("DOMContentLoaded", function () {
+    window.renderOnionNet(document.getElementById("onion-net"), { nodes: 32, links: 44, w: 560, h: 560 });
+  });
+</script>
+{% endblock %}

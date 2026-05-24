@@ -67,17 +67,19 @@ def unauthorize():
         return render_template('unauthorize.html')
 
 
-# Default Page is Dashboard
-@app.route('/',methods=['GET'])
+# Public marketing landing page
+@app.route('/home', methods=['GET'])
+def landing():
+    return render_template('pages/landing.html')
+
+
+# Default route — anonymous visitors get the landing page,
+# authenticated operators go straight to the command center.
+@app.route('/', methods=['GET'])
 def default():
     if not current_user.is_authenticated:
-        return redirect(url_for('login'))
-    
-    if request.method == 'GET':
-        if current_user:
-            return redirect(url_for('dashboard'))
-        
-        return redirect(url_for('login'))
+        return redirect(url_for('landing'))
+    return redirect(url_for('dashboard'))
 
 
 # Login page route
@@ -976,7 +978,7 @@ def fuzz_site():
 
 ######################################################## EXIF METADATA ######################################################
 
-@app.route("/enumerate/metadata", methods=["POST"])
+@app.route("/enumerate/metadata", methods=["GET", "POST"])
 @login_required
 def metadata():
     if request.method == "POST":
@@ -998,9 +1000,9 @@ def metadata():
 
             # Display the metadata
             metadata = result.stdout if result.stdout else "No metadata found"
-            return render_template("details.html", message="File uploaded and metadata extracted:", metadata=metadata)
+            return render_template("metadata.html", message="File uploaded and metadata extracted:", metadata=metadata)
 
-    return redirect(url_for('fuzz_site'))
+    return render_template("metadata.html")
 
 ####################################################################  DEANONYMIZE  ###########################################################
 """
@@ -1040,4 +1042,7 @@ def logout():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # NOTE: port 5000 is squatted by macOS AirPlay Receiver and returns 403.
+    # Bind to 5001 by default; override with PORT=… in the environment.
+    import os
+    app.run(debug=True, host='127.0.0.1', port=int(os.environ.get('PORT', 5001)))

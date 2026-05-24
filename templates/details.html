@@ -1,172 +1,183 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web Enumeration Tool</title>
-    <style>
-        body {
-            background-color: #17191c;
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            align-items:center;
-        }
-        header {
-            background-color: #232f3e;
-            color: white;
-            text-align: center;
-            padding: 20px;
-        }
-        h1 {
-            margin: 0;
-            font-size: 28px;
-        }
-        .container {
-            width: 80%;
-            margin: 20px auto;
-            background-color: #17191c;
-            padding: 20px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            border-radius: 5px;
-        }
-        form {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        input[type="text"],
-        input[type="file"],
-        select {
-            padding: 12px;
-            margin: 10px 0;
-            width: 60%;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            background-color: #f9f9f9;
-            color: black;
-            outline: none;
-        }
-        input[type="text"]:focus,
-        input[type="file"]:focus,
-        select:focus {
-            box-shadow: 0 0 5px #232f3e;
-        }
-        input[type="text"]::placeholder {
-            color: #888;
-        }
-        label {
-            display: flex;
-            align-items: center;
-            margin-top: 10px;
-            color: white;
-        }
-        button[type="submit"] {
-            padding: 12px 20px;
-            border: none;
-            border-radius: 5px;
-            background-color: #BB86FC;
-            color: black;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            margin-top: 15px;
-        }
-        button[type="submit"]:hover {
-            background-color: #BB86FC;
-        }
-        table {
-            border-collapse: collapse;
-            width: 100%;
-            border: 1px solid #ddd;
-            margin-top: 20px;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            text-align: left;
-            padding: 10px;
-            color:white;
-        }
-        th {
-            background-color: #333;
-            color: white;
-        }
-        tr:nth-child(even) {
-            background-color: #333;
-        }
-        tr:hover {
-            background-color: #333;
-        }
-        strong {
-            color: #90EE90;
-        }
-        pre {
-            background-color: #f9f9f9;
-            padding: 15px;
-            border-radius: 5px;
-            max-width: 600px;
-            overflow-x: auto;
-            margin-top: 20px;
-            align-items:center;
-        }
-    </style>
-</head>
-<body>
-    <header>
-        <h1>Enumerate URLs</h1>
-    </header>
-    <div class="container">
-        <form action="/enumerate/details" method="POST">
-            <p style="color:white;"><i>Note : The time taken depends upon the fuzzing and recursive process of enumeration..!</i></p>
-            <input type="text" name="url" id="url" placeholder="Enter URL" style="color:black;" required>
-            <input type="text" name="new_word" style="color:black;" placeholder="Add New Word to Wordlist (Optional)">
-            <label><input type="checkbox" name="is_fuzz"> Fuzz</label>
-            <button type="submit">Start Enumeration</button>
-        </form>
-        <form action="/enumerate/details" method="POST">
-            <label for="export_format">Export Format:</label>
-            <select id="export_format" name="export_format">
-              <option value="txt">TXT</option>
-              <option value="json">JSON</option>
-              <option value="pdf">PDF</option>
-            </select><br>
-            <button type="submit">Export</button>
-        </form>
-        <hr>
-        <form action="/enumerate/metadata" method="POST" enctype="multipart/form-data">
-            <input type="file" name="file" accept="image/*" required>
-            <button type="submit">Extract Image Metadata</button>
-        
-        <!--{% if message %}
-            <p>{{ message }}</p>
-        {% endif %}-->
-        {% if metadata %}
-            <h2 style="color:white; text-align:center;">Metadata:</h2>
-            <pre class="containter">{{ metadata }}</pre>
-        {% endif %}
-        </form>
-        <h1 style="font-size: 24px; margin-top: 20px; color:white;">Fuzzing Results</h1><p style="color:white;"><i>Note : Results may inaccurate sometimes..!!</i></p>
-        <table>
-            <tr>
-                <th class="category-column">Category</th>
-                <th class="match-column">Match</th>
-                <th class="url-column">URL</th>
-            </tr>
-            {% for result in results %}
-                {% if "FUZZED" in result %}
-                    <tr>
-                        <td colspan="3"><strong>{{ result }}</strong></td>
-                    </tr>
-                {% else %}
-                    {% set parts = result.split('|') %}
-                    <tr>
-                        <td>{{ parts[0] }}</td>
-                        <td>{{ parts[1] }}</td>
-                        <td>{{ parts[2] }}</td>
-                    </tr>
-                {% endif %}
-            {% endfor %}
-        </table>
+{% extends "base.html" %}
+{% block title %}Enumerate · TORNET GRANTED{% endblock %}
+{% block crumb %}Enumerate{% endblock %}
+
+{% block content %}
+<header class="page-head">
+  <div>
+    <div class="crumbs"><span>Console</span><span>/</span><span>Reconnaissance</span><span>/</span><span>Enumerate</span></div>
+    <h1>Enumerate &amp; Fingerprint</h1>
+    <p class="lede">Regex-driven leak detection across rendered hidden-service content. Surface credentials, crypto wallets, contact vectors, domain references, and exposed server configuration files via guided fuzzing.</p>
+  </div>
+  <div class="actions"><span class="pill pill--warn"><span class="dot"></span>MODULE 04 · LEAK-HUNT</span></div>
+</header>
+
+{% if message %}
+<div class="card mt-4" style="border-color: rgba(106,166,255,0.32); background: var(--info-soft);">
+  <div class="card-body" style="padding:var(--s-4) var(--s-5);">
+    <span class="text-up" style="color:var(--info); font-size:11px; font-family:var(--font-mono);">NOTICE</span>
+    <p class="text-hi mt-2" style="margin:0;">{{ message }}</p>
+  </div>
+</div>
+{% endif %}
+
+<section class="grid-2 mt-4" style="grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);">
+
+  <!-- ── Enumeration form ── -->
+  <div class="card">
+    <div class="card-head">
+      <div><span class="eyebrow">Operation Brief</span><h3 style="margin-top:8px;">Configure enumeration</h3></div>
     </div>
-</body>
-</html>
+    <div class="card-body">
+      <form action="/enumerate/details" method="POST" class="col gap-4">
+        <div class="field">
+          <label class="field-label" for="url">Target onion</label>
+          <div class="input-wrap">
+            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3v18"/></svg>
+            <input class="input input--mono" type="text" name="url" id="url" placeholder="http://target.onion" required>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="new_word">Add to wordlist <span class="text-low" style="text-transform:none;font-family:var(--font-sans);letter-spacing:0;">(optional)</span></label>
+          <input class="input input--mono" type="text" name="new_word" placeholder="e.g. /admin.bak">
+          <span class="field-hint">Appends a single entry to the platform fuzz wordlist for future operations.</span>
+        </div>
+
+        <div class="row gap-3">
+          <label class="check-row">
+            <input class="checkbox" type="checkbox" name="is_fuzz">
+            Enable fuzzing of server configuration paths
+          </label>
+        </div>
+
+        <div class="row gap-3 mt-3">
+          <button type="submit" class="btn btn--primary">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+            Start Enumeration
+          </button>
+          <span class="text-low" style="font-size:12px;">Runtime scales with fuzzing depth.</span>
+        </div>
+      </form>
+
+      <div class="div-label">EXIF Forensics</div>
+
+      <form action="/enumerate/metadata" method="POST" enctype="multipart/form-data" class="col gap-4">
+        <label class="dropzone">
+          <span class="dz-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+          </span>
+          <strong>Drop image artefact</strong> or <span style="color:var(--accent);">click to browse</span>
+          <div class="text-low mt-2" style="font-size:12px;">Supports JPG / PNG / WebP · processed via ExifTool</div>
+          <div class="text-hi text-mono mt-3 dz-filename" style="font-size:12px;">— no artefact selected —</div>
+          <input type="file" name="file" accept="image/*" required>
+        </label>
+        <button type="submit" class="btn btn--ghost">Extract Image Metadata</button>
+      </form>
+
+      {% if metadata %}
+        <div class="div-label">Extracted Metadata</div>
+        <pre class="code">{{ metadata }}</pre>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- ── Export & guidance ── -->
+  <div class="col gap-4">
+    <div class="card">
+      <div class="card-head">
+        <div><span class="eyebrow">Export</span><h3 style="margin-top:8px;">Findings packaging</h3></div>
+      </div>
+      <div class="card-body">
+        <form action="/enumerate/details" method="POST" class="col gap-4">
+          <div class="field">
+            <label class="field-label" for="export_format">Format</label>
+            <select class="select" id="export_format" name="export_format">
+              <option value="txt">TXT — flat findings</option>
+              <option value="json">JSON — structured payload</option>
+              <option value="pdf">PDF — analyst report</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn--ghost">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Export Findings
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div><span class="eyebrow">Detection Catalogue</span><h3 style="margin-top:8px;">What this module surfaces</h3></div>
+      </div>
+      <div class="card-body col gap-3">
+        <div class="row-sb"><span class="text-mid">Usernames</span><span class="sev sev--low">LOW</span></div>
+        <div class="row-sb"><span class="text-mid">Crypto wallet addresses</span><span class="sev sev--medium">MEDIUM</span></div>
+        <div class="row-sb"><span class="text-mid">Email / contact vectors</span><span class="sev sev--medium">MEDIUM</span></div>
+        <div class="row-sb"><span class="text-mid">Clearnet domains</span><span class="sev sev--high">HIGH</span></div>
+        <div class="row-sb"><span class="text-mid">Plaintext credentials</span><span class="sev sev--critical">CRITICAL</span></div>
+        <div class="row-sb"><span class="text-mid">Exposed configuration files</span><span class="sev sev--critical">CRITICAL</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Findings table ── -->
+<section class="card mt-6">
+  <div class="card-head">
+    <div><span class="eyebrow">Findings</span><h3 style="margin-top:8px;">Enumeration intelligence</h3></div>
+    <span class="text-mono text-low" style="font-size:11px;">{{ results|length if results else 0 }} INDICATORS</span>
+  </div>
+  <div class="card-body" style="padding:0;">
+    {% if results and results|length > 0 %}
+      <table class="table">
+        <thead>
+          <tr>
+            <th style="width:48px;">#</th>
+            <th style="width:180px;">Category</th>
+            <th>Match</th>
+            <th>Source URL</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for result in results %}
+            {% if "FUZZED" in result %}
+              <tr>
+                <td colspan="4">
+                  <div class="row gap-3">
+                    <span class="sev sev--high">FUZZ HIT</span>
+                    <span class="text-hi text-mono">{{ result }}</span>
+                  </div>
+                </td>
+              </tr>
+            {% else %}
+              {% set parts = result.split('|') %}
+              <tr>
+                <td class="row-num">{{ loop.index }}</td>
+                <td>
+                  {% set cat = parts[0]|lower %}
+                  {% if 'password' in cat or 'cred' in cat %}<span class="sev sev--critical">{{ parts[0] }}</span>
+                  {% elif 'crypto' in cat or 'wallet' in cat or 'btc' in cat %}<span class="sev sev--medium">{{ parts[0] }}</span>
+                  {% elif 'email' in cat %}<span class="sev sev--medium">{{ parts[0] }}</span>
+                  {% elif 'domain' in cat %}<span class="sev sev--high">{{ parts[0] }}</span>
+                  {% elif 'user' in cat %}<span class="sev sev--low">{{ parts[0] }}</span>
+                  {% else %}<span class="sev sev--info">{{ parts[0] }}</span>
+                  {% endif %}
+                </td>
+                <td class="mono text-hi truncate" style="max-width: 42ch;">{{ parts[1] if parts|length > 1 else '' }}</td>
+                <td class="mono text-mid truncate" style="max-width: 42ch;">{{ parts[2] if parts|length > 2 else '' }}</td>
+              </tr>
+            {% endif %}
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <div class="empty">
+        <div class="empty-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div>
+        <h3>No findings yet</h3>
+        <p>Submit an onion target above to begin enumeration. Categorised indicators appear here as they are surfaced.</p>
+      </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}
